@@ -138,11 +138,3 @@ for generation in range(n_generations):
     print('Selection made')
     print('Population Fitness:')
     print(world_two.fitness())
-
-
-	        
-
-
-
-
-
