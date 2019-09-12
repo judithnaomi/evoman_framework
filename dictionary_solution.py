@@ -49,15 +49,16 @@ n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
 dom_u = 1
 dom_l = -1
-npop = 4
+npop = 100
 gens = 30
 mutation = 0.2
 last_best = 0
 
 ################################### OWN PART ###########################################
 
-n_generations = 6
-n_deaths = 2  # number of individuals that dies each generation
+#n_generations = 6
+difference_threshold = 40 
+n_deaths = 50  # number of individuals that dies each generation
 id_individual = 0 # the ids of the new individuals only increase
 
 population = {}  # population is a dictionary with keys individual IDs
@@ -87,7 +88,7 @@ def fitness(individual):
 
 # returns the population as a list of triples, i.e. 
 # [(ID,fitness,list_of_values), (ID,fitness,list_of_values),....]
-def ordered_population():
+def ordered_population(population):
     return sorted(population.items(), key = lambda kv:kv[1][0], reverse=True) #kv[1] is the value of the keyvalue pair
 #kv, i.e. kv[1]=(fitness,individual). kv[1][0] is the fitness.
 
@@ -95,7 +96,7 @@ def ordered_population():
 def mate():
 
     newborns = []
-    pop = ordered_population()
+    pop = ordered_population(population)
 
     for i in range(0,len(pop),2): #every iteration, i increases with 2
         key_dad, value_dad = pop[i]
@@ -115,7 +116,7 @@ def mate():
     return newborns
 
 def selection(n_deaths):  # this method kills a specified number of the least fit individuals
-    deaths = ordered_population()[::-1][:n_deaths] #we take the first n_deaths elements
+    deaths = ordered_population(population)[::-1][:n_deaths] #we take the first n_deaths elements
     #of the inverted population list, the weakest individuals
    
     for key,value in deaths:
@@ -131,8 +132,27 @@ def add_individuals_to_population(new_individuals):
         print("individual " + str(id_individual) +" added")
 
 def print_ordered_population_nicely():
-    for key,value in ordered_population():
+    for key,value in ordered_population(population):
         print(key,value[0]), #print only the individual ID and the fitness
+
+def difference(generation, previous_generation):
+        differences = []
+        
+        ordered_1 = ordered_population(generation)
+        ordered_2 = ordered_population(previous_generation)
+
+        for i in range(len(generation)):
+
+            key1, value1 = ordered_1[i]
+            key2, value2 = ordered_2[i]
+            difference_in_fitness = abs(value1[0]-value2[0])
+            differences.append(difference_in_fitness)
+
+        
+        #return np.exp((sum([x**2 for x in differences]))) 
+        #difference measured by the sum of squares
+        return sum(differences)
+      
 
 ############ INITIALIZE POPULATION ###################
 
@@ -142,16 +162,32 @@ add_individuals_to_population(pioneers)
 
 ############ MAIN PROGRAM ########################
 
-for i in range(n_generations):
+generations = []
+generations.append(population.copy())
+
+newborns = mate()
+add_individuals_to_population(newborns)
+selection(n_deaths)
+generations.append(population.copy())
+
+#for i in range(n_generations):
+
+i=1
+
+while difference(generations[i],generations[i-1])>difference_threshold:
+    i = i + 1
     print("Generation" + str(i))
 
     newborns = mate()
     add_individuals_to_population(newborns)
     
     selection(n_deaths)
+
+    generations.append(population.copy())
+    print("Difference:")
+    print(difference(generations[i], generations[i-1]))
     print_ordered_population_nicely()
 
- 
 
 
 
