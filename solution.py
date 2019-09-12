@@ -2,6 +2,9 @@
 # Freek Stroes, Thijs Roukens, Sebastian Smit, Judith Schermer
 # 12 September 2019
 
+
+# Code until ##### OWN PART ##### is taken from EvoMan FrameWork - V1.0 2016 by Karine Miras  
+
 # imports framework
 import sys
 sys.path.insert(0, 'evoman')
@@ -52,9 +55,13 @@ gens = 30
 mutation = 0.2
 last_best = 0
 
+################################### OWN PART ###########################################
+
 n_generations = 20
 n_deaths = 2 # number of individuals that dies each generation
 
+
+# simulation(env,x) is taken from EvoMan FrameWork - V1.0 2016 by Karine Miras
 # simulates a game with game strategy x, outputs fitness according to
 # default fitness function
 def simulation(env,x): 
