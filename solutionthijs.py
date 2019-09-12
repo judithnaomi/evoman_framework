@@ -49,15 +49,15 @@ n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
 dom_u = 1
 dom_l = -1
-npop = 4
+npop = 20
 gens = 30
 mutation = 0.2
 last_best = 0
 
 ################################### OWN PART ###########################################
 
-n_generations = 6
-n_deaths = 2  # number of individuals that dies each generation
+n_generations = 3
+n_deaths = 10  # number of individuals that dies each generation
 
 
 # simulation(env,x) is taken from EvoMan FrameWork - V1.0 2016 by Karine Miras
@@ -140,8 +140,8 @@ compile_newborns = compile(fitnes_scores_newborns,newborns)
 total_population = ranked_population + compile_newborns
 rank_total_population = order_population_fitness(total_population)
 total_population_nof = mating_population(rank_total_population)
-new_pop = selection(total_population_nof,2)
-fitness_scores_new_pop = selection(get_fitness_scores(rank_total_population),2)
+new_pop = selection(total_population_nof,n_deaths)
+fitness_scores_new_pop = selection(get_fitness_scores(rank_total_population),n_deaths)
 compiled_new_pop = compile(fitness_scores_new_pop,new_pop)
 
 for i in range(n_generations):
@@ -153,11 +153,11 @@ for i in range(n_generations):
     compiled_new_pop = compiled_new_pop+ compile_newborns
     rank_total_population = order_population_fitness(compiled_new_pop)
     total_population_nof = mating_population(rank_total_population)
-    new_pop = selection(total_population_nof, 2)
-    fitness_scores_new_pop = selection(get_fitness_scores(rank_total_population), 2)
+    new_pop = selection(total_population_nof, n_deaths)
+    fitness_scores_new_pop = selection(get_fitness_scores(rank_total_population), n_deaths)
     compiled_new_pop = compile(fitness_scores_new_pop, new_pop)
 
-print(compiled_new_pop)
+print(fitness_scores_new_pop)
 
 
 
