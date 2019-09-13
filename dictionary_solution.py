@@ -58,7 +58,9 @@ last_best = 0
 
 #n_generations = 6
 difference_threshold = 40 
-n_deaths = 5  # number of individuals that dies each generation
+
+n_deaths = npop/2 # number of individuals that dies each generation
+
 id_individual = 0 # the ids of the new individuals only increase
 
 population = {}  # population is a dictionary with keys individual IDs
@@ -115,7 +117,7 @@ def mate():
         newborns.append(genotype_child)  # offspring is added to the population (born).
     return newborns
 
-def selection(n_deaths):  # this method kills a specified number of the least fit individuals
+def perform_selection(n_deaths):  # this method kills a specified number of the least fit individuals
     deaths = ordered_population(population)[::-1][:n_deaths] #we take the first n_deaths elements
     #of the inverted population list, the weakest individuals
    
@@ -167,7 +169,7 @@ generations.append(population.copy())
 
 newborns = mate()
 add_individuals_to_population(newborns)
-selection(n_deaths)
+perform_selection(n_deaths)
 generations.append(population.copy())
 
 #for i in range(n_generations):
@@ -181,7 +183,7 @@ while difference(generations[i],generations[i-1])>difference_threshold:
     newborns = mate()
     add_individuals_to_population(newborns)
     
-    selection(n_deaths)
+    perform_selection(n_deaths)
 
     generations.append(population.copy())
     print("Difference:")

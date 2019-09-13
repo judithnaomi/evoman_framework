@@ -49,7 +49,7 @@ n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
 dom_u = 1
 dom_l = -1
-npop = 10
+npop = 20
 gens = 30
 mutation = 0.2
 last_best = 0
@@ -58,7 +58,7 @@ last_best = 0
 
 # n_generations = 6
 difference_threshold = 40
-n_deaths = 5  # number of individuals that dies each generation
+n_deaths = (npop/5)*2 # number of individuals that dies each generation
 id_individual = 0  # the ids of the new individuals only increase
 
 population = {}  # population is a dictionary with keys individual IDs
@@ -74,6 +74,8 @@ def simulation(env, x):
     f, p, e, t = env.play(pcont=x)
     return f
 
+def get_fittest(nof_fittest, pop):
+    return ordered_population(pop)[:nof_fittest]
 
 def spawn(size):  # a prespecified number (''size'') of individuals is spawned
     initial_population = []
@@ -100,35 +102,41 @@ def ordered_population(population):
 
 # kv, i.e. kv[1]=(fitness,individual). kv[1][0] is the fitness.
 
-
 def mate():
     newborns = []
     pop = ordered_population(population)
-    #kies randdom 5 getallen tussen 0 en 100
-    random_numbers = []
-    for i in range(5):
-        random_numbers += rand.randrange(0,100)
-    #zoek de bijbehorende individual en hun fitness
-    #sorteer ze op basis van fitness,of kies gewoon de twee fitste
+    random_numbers = list(xrange(0, npop )) #generates a list counting from 0 up to and including npop -1
+    rand.shuffle(random_numbers) #shuffle the numbers
 
-    for i in range(0, len(pop), 2):  # every iteration, i increases with 2
+    for i in range(0, len(pop), 5):
+        five_random = [random_numbers[i], random_numbers[i + 1], random_numbers[i + 2], random_numbers[i + 3], random_numbers[i + 4]] #makes a list with 5 random numbers
+        five_random.sort() # sorts these number from low to high
 
-        key_dad, value_dad = pop[i]
-        key_mom, value_mom = pop[i + 1]
-        # we want them to be monogamous and to mate in pairs
+        #the first mating pair; chosing the lowest random number automatically gives the one with the highest fitnes becaus pop is ordered on fitness
+        key_dad1, value_dad1 = pop[five_random[0]]
+        key_mom1, value_mom1 = pop[five_random[1]]
 
-        genotype_child = (value_mom[1] + value_dad[1]) / 2
+        # the second mating pair
+        key_dad2, value_dad2 = pop[five_random[2]]
+        key_mom2, value_mom2 = pop[five_random[3]]
 
-        # the numbers of the  fittest with their subsequent individual are averaged to create a baby always skipping one (monogamous).
-        gene_mutations = [(rand.random() - .5) * .1 for x in
+        #creating the children
+        genotype_child1 = (value_mom1[1] + value_dad1[1]) / 2
+        genotype_child2 = (value_mom2[1] + value_dad2[1]) / 2
+
+        gene_mutations1 = [(rand.random() - .5) * .1 for x in
                           range(n_vars)]  # creates some random numbers between -.1 and .1
+        gene_mutations2 = [(rand.random() - .5) * .1 for x in
+                           range(n_vars)]
 
-        genotype_child = np.add(gene_mutations, genotype_child)
+        genotype_child1 = np.add(gene_mutations1, genotype_child1)
+        genotype_child2 = np.add(gene_mutations2, genotype_child2)
 
-        # the random numbers are added to the offsprings list to create mutations in its genome.
-
-        newborns.append(genotype_child)  # offspring is added to the population (born).
+        #append the children to the newborns
+        newborns.append(genotype_child1)
+        newborns.append(genotype_child2)# offspring is added to the population (born).
     return newborns
+
 
 
 def selection(n_deaths):  # this method kills a specified number of the least fit individuals
@@ -189,6 +197,7 @@ generations.append(population.copy())
 # for i in range(n_generations):
 
 i = 1
+print(difference(generations[i], generations[i - 1]))
 
 while difference(generations[i], generations[i - 1]) > difference_threshold:
     i = i + 1
@@ -203,7 +212,4 @@ while difference(generations[i], generations[i - 1]) > difference_threshold:
     print("Difference:")
     print(difference(generations[i], generations[i - 1]))
     print_ordered_population_nicely()
-
-
-
 
