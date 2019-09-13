@@ -49,7 +49,7 @@ n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
 dom_u = 1
 dom_l = -1
-npop = 10
+npop = 20
 gens = 30
 mutation = 0.2
 last_best = 0
@@ -57,8 +57,8 @@ last_best = 0
 ################################### OWN PART ###########################################
 
 # n_generations = 6
-difference_threshold = 40
-n_deaths = 5  # number of individuals that dies each generation
+difference_threshold = 0
+n_deaths = int(npop/5)  # number of individuals that dies each generation = npop divided by the number of possible parents used
 id_individual = 0  # the ids of the new individuals only increase
 
 population = {}  # population is a dictionary with keys individual IDs
@@ -74,6 +74,8 @@ def simulation(env, x):
     f, p, e, t = env.play(pcont=x)
     return f
 
+def get_fittest(nof_fittest, pop):
+    return ordered_population(pop)[:nof_fittest]
 
 def spawn(size):  # a prespecified number (''size'') of individuals is spawned
     initial_population = []
@@ -103,18 +105,24 @@ def ordered_population(population):
 
 def mate():
     newborns = []
-    pop = ordered_population(population)
+
     #kies randdom 5 getallen tussen 0 en 100
-    random_numbers = []
-    for i in range(5):
-        random_numbers += rand.randrange(0,100)
+    IDs = list(population.keys())
+    rand.shuffle(IDs)
     #zoek de bijbehorende individual en hun fitness
     #sorteer ze op basis van fitness,of kies gewoon de twee fitste
 
-    for i in range(0, len(pop), 2):  # every iteration, i increases with 2
+    for i in range(0, len(IDs), 5):  # every iteration, i increases with 2
+        possible_parents = {}
+        i=0
+        for index in IDs[i:i+4]:
+            possible_parents[i] = population[index]
+            i += 1
 
-        key_dad, value_dad = pop[i]
-        key_mom, value_mom = pop[i + 1]
+        parents = get_fittest(2, possible_parents)
+
+        key_dad, value_dad = parents[0]
+        key_mom, value_mom = parents[1]
         # we want them to be monogamous and to mate in pairs
 
         genotype_child = (value_mom[1] + value_dad[1]) / 2
@@ -189,6 +197,7 @@ generations.append(population.copy())
 # for i in range(n_generations):
 
 i = 1
+print(difference(generations[i], generations[i - 1]))
 
 while difference(generations[i], generations[i - 1]) > difference_threshold:
     i = i + 1
