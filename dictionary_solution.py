@@ -49,7 +49,7 @@ n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
 dom_u = 1
 dom_l = -1
-npop = 100
+npop = 10
 gens = 30
 mutation = 0.2
 last_best = 0
@@ -58,7 +58,7 @@ last_best = 0
 
 #n_generations = 6
 difference_threshold = 40 
-n_deaths = 50  # number of individuals that dies each generation
+n_deaths = 5  # number of individuals that dies each generation
 id_individual = 0 # the ids of the new individuals only increase
 
 population = {}  # population is a dictionary with keys individual IDs
