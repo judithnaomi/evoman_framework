@@ -1,6 +1,6 @@
 # Assignment 1 Evolutionary Computing
 # Freek Stroes, Thijs Roukens, Sebastian Smit, Judith Schermer
-# 12 September 2019
+# 15 September 2019
 
 
 # Code until ##### OWN PART ##### is taken from EvoMan FrameWork - V1.0 2016 by Karine Miras
@@ -65,10 +65,9 @@ id_individual = 0 # the ids of the new individuals only increase
 
 population = {}  # population is a dictionary with keys individual IDs
 #and values are tuples where the first element is the fitness value and 
-#the second element is the list of nvars real numbers
-#between -1 and 1.
+#the second element is the list neutral network weights between -1 and 1.
 #e.g. population['1'] = (0.89, [-0.433434,-0.4324234,0.58532, ..., ]) here, individual
-# 1 has fitness 0.89 and [-0.4333434,...] etc is its representation.
+# 1 has fitness 0.89 and [-0.4333434,...] are the neural network weights.
 
 def simulation(env, x):
     f, p, e, t = env.play(pcont=x)
@@ -90,10 +89,10 @@ def fitness(individual):
 
 # returns the population as a list of triples, i.e. 
 # [(ID,fitness,list_of_values), (ID,fitness,list_of_values),....]
+# note: fitness in decreasing order, so starting with fittest individual
 def ordered_population(population):
-    return sorted(population.items(), key = lambda kv:kv[1][0], reverse=True) #kv[1] is the value of the keyvalue pair
-#kv, i.e. kv[1]=(fitness,individual). kv[1][0] is the fitness.
-
+    return sorted(population.items(), key = lambda kv:kv[1][0], reverse=True) 
+    # e.g. kv[1]=(fitness,individual). kv[1][0] is the fitness and fitness is used to sort the list. 
 
 def mate():
 
