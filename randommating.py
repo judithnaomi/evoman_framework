@@ -58,7 +58,7 @@ last_best = 0
 
 # n_generations = 6
 difference_threshold = 40
-n_deaths = (npop/5)*2 # number of individuals that dies each generation
+n_deaths = int((npop/5)*2) # number of individuals that dies each generation
 id_individual = 0  # the ids of the new individuals only increase
 
 population = {}  # population is a dictionary with keys individual IDs
@@ -105,7 +105,7 @@ def ordered_population(population):
 def mate():
     newborns = []
     pop = ordered_population(population)
-    random_numbers = list(xrange(0, npop )) #generates a list counting from 0 up to and including npop -1
+    random_numbers = list(range(0, npop )) #generates a list counting from 0 up to and including npop -1
     rand.shuffle(random_numbers) #shuffle the numbers
 
     for i in range(0, len(pop), 5):
