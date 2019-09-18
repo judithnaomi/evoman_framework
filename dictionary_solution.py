@@ -45,10 +45,6 @@ ini = time.time()  # sets time marker
 
 run_mode = 'train'  # train or test
 
-21*4 + 25
-84 + 25 = 109
-
-
 n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
 dom_u = 1
@@ -63,7 +59,7 @@ last_best = 0
 #n_generations = 6
 difference_threshold = 40 
 
-n_deaths = int(npop/2) # number of individuals that dies each generation
+n_deaths = int(npop/5)*2 # number of individuals that dies each generation
 
 id_individual = 0 # the ids of the new individuals only increase
 
@@ -210,4 +206,5 @@ while difference(generations[i],generations[i-1])>difference_threshold:
 
 
 
-
+fim = time.time() # prints total execution time for experiment
+print( '\nExecution time: '+str(round((fim-ini)/60))+' minutes \n')
