@@ -1,6 +1,6 @@
 # Assignment 1 Evolutionary Computing
 # Freek Stroes, Thijs Roukens, Sebastian Smit, Judith Schermer
-# 15 September 2019
+# 18 September 2019
 
 
 # Code until ##### OWN PART ##### is taken from EvoMan FrameWork - V1.0 2016 by Karine Miras
