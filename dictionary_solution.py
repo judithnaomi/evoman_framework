@@ -45,6 +45,10 @@ ini = time.time()  # sets time marker
 
 run_mode = 'train'  # train or test
 
+21*4 + 25
+84 + 25 = 109
+
+
 n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
 dom_u = 1
@@ -59,7 +63,7 @@ last_best = 0
 #n_generations = 6
 difference_threshold = 40 
 
-n_deaths = npop/2 # number of individuals that dies each generation
+n_deaths = int(npop/2) # number of individuals that dies each generation
 
 id_individual = 0 # the ids of the new individuals only increase
 
@@ -94,27 +98,42 @@ def ordered_population(population):
     return sorted(population.items(), key = lambda kv:kv[1][0], reverse=True) 
     # e.g. kv[1]=(fitness,individual). kv[1][0] is the fitness and fitness is used to sort the list. 
 
-def mate():
 
+def mate():
     newborns = []
     pop = ordered_population(population)
+    random_numbers = list(range(0, npop )) #generates a list counting from 0 up to and including npop -1
+    rand.shuffle(random_numbers) #shuffle the numbers
 
-    for i in range(0,len(pop),2): #every iteration, i increases with 2
-        key_dad, value_dad = pop[i]
-        key_mom, value_mom = pop[i+1]
-        # we want them to be monogamous and to mate in pairs
-        
-        genotype_child = (value_mom[1] + value_dad[1]) / 2
-     
-       # the numbers of the  fittest with their subsequent individual are averaged to create a baby always skipping one (monogamous).
-        gene_mutations = [(rand.random() - .5) * .1 for x in range(n_vars)]  # creates some random numbers between -.1 and .1
-       
-        genotype_child = np.add(gene_mutations, genotype_child)
-      
-        # the random numbers are added to the offsprings list to create mutations in its genome.
+    for i in range(0, len(pop), 5):
+        five_random = [random_numbers[i], random_numbers[i + 1], random_numbers[i + 2], random_numbers[i + 3], random_numbers[i + 4]] #makes a list with 5 random numbers
+        five_random.sort() # sorts these number from low to high
 
-        newborns.append(genotype_child)  # offspring is added to the population (born).
+        #the first mating pair; chosing the lowest random number automatically gives the one with the highest fitnes becaus pop is ordered on fitness
+        key_dad1, value_dad1 = pop[five_random[0]]
+        key_mom1, value_mom1 = pop[five_random[1]]
+
+        # the second mating pair
+        key_dad2, value_dad2 = pop[five_random[2]]
+        key_mom2, value_mom2 = pop[five_random[3]]
+
+        #creating the children
+        genotype_child1 = (value_mom1[1] + value_dad1[1]) / 2
+        genotype_child2 = (value_mom2[1] + value_dad2[1]) / 2
+
+        gene_mutations1 = [(rand.random() - .5) * .1 for x in
+                          range(n_vars)]  # creates some random numbers between -.1 and .1
+        gene_mutations2 = [(rand.random() - .5) * .1 for x in
+                           range(n_vars)]
+
+        genotype_child1 = np.add(gene_mutations1, genotype_child1)
+        genotype_child2 = np.add(gene_mutations2, genotype_child2)
+
+        #append the children to the newborns
+        newborns.append(genotype_child1)
+        newborns.append(genotype_child2)# offspring is added to the population (born).
     return newborns
+
 
 def perform_selection(n_deaths):  # this method kills a specified number of the least fit individuals
     deaths = ordered_population(population)[::-1][:n_deaths] #we take the first n_deaths elements
