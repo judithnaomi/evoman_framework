@@ -146,6 +146,12 @@ def mate():
 
         gene_mutations1 = [mutation_child1 for x in  range(n_vars)]  # creates some random numbers between -.1 and .1
         gene_mutations2 = [mutation_child2  for x in range(n_vars)]
+
+
+      #  gene_mutations1 = [(rand.random() - .5) * mutation_child1 for x in
+      #                    range(n_vars)]  # creates some random numbers between -.1 and .1
+      #  gene_mutations2 = [(rand.random() - .5) * mutation_child2 for x in
+      #                     range(n_vars)]
    
 
         genotype_child1 = keep_within_boundaries(np.add(gene_mutations1, genotype_child1), -1, 1)
