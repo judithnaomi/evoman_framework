@@ -66,12 +66,22 @@ id_individual = 0 # the ids of the new individuals only increase
 population = {}  # population is a dictionary with keys individual IDs
 #and values are tuples where the first element is the fitness value and 
 #the second element is the list neutral network weights between -1 and 1.
-#e.g. population['1'] = (0.89, [-0.433434,-0.4324234,0.58532, ..., ]) here, individual
+#e.g. population['1'] = (0.89, [-0.433434,-0.4324234,0.58532, ..., ], mutation_sigma) here, individual
 # 1 has fitness 0.89 and [-0.4333434,...] are the neural network weights.
 
 def simulation(env, x):
     f, p, e, t = env.play(pcont=x)
     return f
+
+def keep_within_boundaries(ls, lower, upper):
+    # if any number in the list is higher than the highest allowed value, change it to highest value.
+    # if any number in the list is lower than the lowest allowed value, change it to the lowest value. 
+    for i in range(len(ls)):
+        if ls[i] < lower:
+            ls[i] = lower
+        elif ls[i] > upper:
+            ls[i] = upper
+    return ls   
 
 def spawn(size):  # a prespecified number (''size'') of individuals is spawned
     initial_population = []
@@ -122,13 +132,15 @@ def mate():
         gene_mutations2 = [(rand.random() - .5) * .1 for x in
                            range(n_vars)]
 
-        genotype_child1 = np.add(gene_mutations1, genotype_child1)
-        genotype_child2 = np.add(gene_mutations2, genotype_child2)
+        genotype_child1 = keep_within_boundaries(np.add(gene_mutations1, genotype_child1), -1, 1)
+        genotype_child2 = keep_within_boundaries(np.add(gene_mutations2, genotype_child2), -1, 1)
 
         #append the children to the newborns
         newborns.append(genotype_child1)
         newborns.append(genotype_child2)# offspring is added to the population (born).
     return newborns
+
+
 
 
 def perform_selection(n_deaths):  # this method kills a specified number of the least fit individuals
