@@ -20,13 +20,14 @@ import numpy as np
 from math import fabs, sqrt
 import glob, os
 
-experiment_name = 'assignment_specialist1'
+experiment_name = 'assignment_specialist1'      # Assignment task 1
+enemy = 2                                       # Set correct enemy to run in this solution
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
 # initializes simulation in individual evolution mode, for single static enemy.
 env = Environment(experiment_name=experiment_name,
-                  enemies=[2],
+                  enemies=[enemy],
                   playermode="ai",
                   player_controller=player_controller(),
                   enemymode="static",
@@ -49,15 +50,15 @@ n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
 dom_u = 1
 dom_l = -1
-npop = 10
+npop = 5
 gens = 30
 mutation = 0.2
 last_best = 0
 
 ################################### OWN PART ###########################################
 
-#n_generations = 6
-difference_threshold = 40 
+n_generations = 4
+#difference_threshold = 40
 
 n_deaths = int(npop/5)*2 # number of individuals that dies each generation
 
@@ -184,6 +185,7 @@ def difference(generation, previous_generation):
 
 ############ INITIALIZE POPULATION ###################
 
+print('Generation 1')
 pioneers = spawn(npop)
 
 add_individuals_to_population(pioneers)
@@ -193,6 +195,7 @@ add_individuals_to_population(pioneers)
 generations = []
 generations.append(population.copy())
 
+print('\nGeneration 2')
 newborns = mate()
 add_individuals_to_population(newborns)
 perform_selection(n_deaths)
@@ -200,11 +203,12 @@ generations.append(population.copy())
 
 #for i in range(n_generations):
 
-i=1
+#i=1
+# while difference(generations[i],generations[i-1])>difference_threshold:
+    # i = i + 1
 
-while difference(generations[i],generations[i-1])>difference_threshold:
-    i = i + 1
-    print("Generation" + str(i))
+for i in range(n_generations-2):        # We construct the first 2 generations outside the for loop
+    print("\nGeneration " + str(i+3))
 
     newborns = mate()
     add_individuals_to_population(newborns)
@@ -212,10 +216,18 @@ while difference(generations[i],generations[i-1])>difference_threshold:
     perform_selection(n_deaths)
 
     generations.append(population.copy())
-    print("Difference:")
-    print(difference(generations[i], generations[i-1]))
-    print_ordered_population_nicely()
+    # print("Difference:")
+    # print(difference(generations[i], generations[i-1]))
+    # print_ordered_population_nicely()
 
+# print('\n', ordered_population(generations[n_generations-1])[0][1])
+
+run = 1
+file_results = open(experiment_name+'/results.txt', 'w')
+file_results.write('Tested Enemy: ' + str(enemy) + '\n')
+file_results.write('RUN ' + str(run) + '\n\n')
+file_results.write('# of generations: ' + str(n_generations) + '\n')
+file_results.write('Best fitness: ' + str(ordered_population(generations[n_generations-1])[0][1][0]) + '\n\n')
 
 
 fim = time.time() # prints total execution time for experiment
