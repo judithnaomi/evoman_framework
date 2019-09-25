@@ -20,7 +20,7 @@ import numpy as np
 from math import fabs, sqrt
 import glob, os
 
-experiment_name = 'individual_demo'
+experiment_name = 'assignment_specialist1'
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
