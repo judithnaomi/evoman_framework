@@ -57,6 +57,7 @@ last_best = 0
 
 ################################### OWN PART ###########################################
 
+runs=2
 n_generations = 4
 #difference_threshold = 40
 
@@ -182,53 +183,70 @@ def difference(generation, previous_generation):
         #difference measured by the sum of squares
         return sum(differences)
       
+for run in range(1,runs+1):
+    print('RUN: ' + str(run))
+    ############ INITIALIZE POPULATION ###################
 
-############ INITIALIZE POPULATION ###################
+    print('Generation 1')
+    pioneers = spawn(npop)
 
-print('Generation 1')
-pioneers = spawn(npop)
+    add_individuals_to_population(pioneers)
 
-add_individuals_to_population(pioneers)
+    ############ MAIN PROGRAM ########################
 
-############ MAIN PROGRAM ########################
+    generations = []
+    generations.append(population.copy())
 
-generations = []
-generations.append(population.copy())
-
-print('\nGeneration 2')
-newborns = mate()
-add_individuals_to_population(newborns)
-perform_selection(n_deaths)
-generations.append(population.copy())
-
-#for i in range(n_generations):
-
-#i=1
-# while difference(generations[i],generations[i-1])>difference_threshold:
-    # i = i + 1
-
-for i in range(n_generations-2):        # We construct the first 2 generations outside the for loop
-    print("\nGeneration " + str(i+3))
-
+    print('\nGeneration 2')
     newborns = mate()
     add_individuals_to_population(newborns)
-    
     perform_selection(n_deaths)
-
     generations.append(population.copy())
-    # print("Difference:")
-    # print(difference(generations[i], generations[i-1]))
-    # print_ordered_population_nicely()
 
-# print('\n', ordered_population(generations[n_generations-1])[0][1])
+    #for i in range(n_generations):
 
-run = 1
-file_results = open(experiment_name+'/results.txt', 'w')
-file_results.write('Tested Enemy: ' + str(enemy) + '\n')
-file_results.write('RUN ' + str(run) + '\n\n')
-file_results.write('# of generations: ' + str(n_generations) + '\n')
-file_results.write('Best fitness: ' + str(ordered_population(generations[n_generations-1])[0][1][0]) + '\n\n')
+    #i=1
+    # while difference(generations[i],generations[i-1])>difference_threshold:
+        # i = i + 1
 
+    for i in range(n_generations-2):        # We construct the first 2 generations outside the for loop
+        print("\nGeneration " + str(i+3))
+
+        newborns = mate()
+        add_individuals_to_population(newborns)
+
+        perform_selection(n_deaths)
+
+        generations.append(population.copy())
+        # print("Difference:")
+        # print(difference(generations[i], generations[i-1]))
+        # print_ordered_population_nicely()
+
+    # print('\n', ordered_population(generations[n_generations-1])[0][1])
+    if run == 1:
+        file_results = open(experiment_name+'/results.txt', 'w')
+        file_results.write('Tested Enemy: ' + str(enemy) + '\n')
+    else:
+        file_results = open(experiment_name+'/results.txt', 'a')
+    file_results.write('RUN ' + str(run) + '\n\n')
+    file_results.write('# of generations: ' + str(n_generations) + '\n')
+    file_results.write('Best fitness: ' + str(ordered_population(generations[n_generations-1])[0][1][0]) + '\n\n')
+
+    average_fitness = []
+    std_fitness = []
+    for i in range(n_generations):
+        fitness_array_of_generation = []
+        for n in range(npop):
+            fitness_array_of_generation.append(ordered_population(generations[i])[n][1][0])
+
+        average_fitness.append(np.mean(fitness_array_of_generation))
+        std_fitness.append(np.std(fitness_array_of_generation))
+
+    file_results.write('Average of the fitness over the generations of this run: ' + str(np.mean(average_fitness)) + '\n')
+    file_results.write('Average standard deviation of the fitness over the generations of this run: ' + str(np.mean(std_fitness)) + '\n\n')
+    file_results.close()
+
+    population = {}
 
 fim = time.time() # prints total execution time for experiment
 print( '\nExecution time: '+str(round((fim-ini)/60))+' minutes \n')
