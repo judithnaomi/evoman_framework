@@ -1,0 +1,17 @@
+Tested Enemy: 2
+RUN 1
+
+# of generations: 4
+Best fitness: 85.8238502674
+
+Average of the fitness over the generations of this run: 29.8883324923
+Average standard deviation of the fitness over the generations of this run: 28.5688333015
+
+RUN 2
+
+# of generations: 4
+Best fitness: 75.2100398291
+
+Average of the fitness over the generations of this run: 32.0315807985
+Average standard deviation of the fitness over the generations of this run: 23.3999782064
+
