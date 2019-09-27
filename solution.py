@@ -260,7 +260,7 @@ for run in range(1,runs+1):
         else:
             old_best_fitness = old_best_fitness
             no_improvement += 1
-        print(no_improvement)
+        print('\nNo improvement: '+str(no_improvement))
 
 
     write_results(run)
