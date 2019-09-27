@@ -1,7 +1,7 @@
 # Assignment 1 Evolutionary Computing
 # Freek Stroes, Thijs Roukens, Sebastian Smit, Judith Schermer
 # 18 September 2019
-
+# Ik wil even kijken of het git pushen zoals ik dit nu doe wel werkt.. groeten freek
 
 # Code until ##### OWN PART ##### is taken from EvoMan FrameWork - V1.0 2016 by Karine Miras
 
