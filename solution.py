@@ -7,7 +7,6 @@
 
 # imports framework
 import sys
-
 sys.path.insert(0, 'evoman')
 from environment import Environment
 from demo_controller import player_controller
@@ -49,24 +48,16 @@ run_mode = 'train'  # train or test
 n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
 
-n_pop = 5
-
-
 ################################### OWN PART ###########################################
 
-n_runs = 2
+population = {} # population is a dictionary with keys individual IDs
+                #and values are tuples where the first element is the fitness value and 
+                #the second element is the list neutral network weights between -1 and 1.
+                #e.g. population['1'] = (0.89, [-0.433434,-0.4324234,0.58532, ..., ], mutation_sigma) here, individual
+                # 1 has fitness 0.89 and [-0.4333434,...] are the neural network weights.
 
-difference_threshold = 3 # if there is no significant improvement after .. generations, then terminate
+id_individual = 0 # the id of the newest individual    
 
-n_deaths = int(n_pop/5)*2 # number of individuals that dies each generation
-
-id_individual = 0 # the id of the newest individual
-
-population = {}  # population is a dictionary with keys individual IDs
-#and values are tuples where the first element is the fitness value and 
-#the second element is the list neutral network weights between -1 and 1.
-#e.g. population['1'] = (0.89, [-0.433434,-0.4324234,0.58532, ..., ], mutation_sigma) here, individual
-# 1 has fitness 0.89 and [-0.4333434,...] are the neural network weights.
 
 def simulation(env, x):
     f, p, e, t = env.play(pcont=x)
@@ -106,8 +97,9 @@ def ordered_population(population):
 
 def mate():
     newborns = []
+    global population
     pop = ordered_population(population)
-    random_numbers = list(range(0, npop)) #generates a list counting from 0 up to and including npop -1
+    random_numbers = list(range(0, len(population))) #generates a list counting from 0 up to and including n_pop -1
     rand.shuffle(random_numbers) #shuffle the numbers
 
     for i in range(0, len(pop), 5): #in steps of 5
@@ -140,7 +132,9 @@ def mate():
     return newborns
 
 
-def select_survivors(n_deaths):  # this method kills a specified number of the least fit individuals
+def select_survivors():  # this method kills a specified number of the least fit individuals
+    global population
+    n_deaths = int(len(population)/5)*2 # number of individuals that dies each generation
     deaths = ordered_population(population)[::-1][:n_deaths] # we take the first n_deaths elements
     #of the inverted population list: the weakest individuals
    
@@ -151,7 +145,7 @@ def select_survivors(n_deaths):  # this method kills a specified number of the l
 def add_individuals_to_population(new_individuals):
 
     for individual in new_individuals:
-        global id_individual 
+        global id_individual, population
         population[id_individual] = [fitness(individual), individual]
         id_individual = id_individual + 1
         print("individual " + str(id_individual) +" added")
@@ -186,7 +180,7 @@ def get_max_fitness(population1):
             max_value = max_value
     return max_value
 
-def write_results(run):
+def write_results(run, generations):
     if run == 1:
         file_results = open(experiment_name+'/results.txt', 'w')
         file_results.write('Tested Enemy: ' + str(enemy) + '\n')
@@ -202,7 +196,7 @@ def write_results(run):
 
     for i in range(len(generations)):
         fitness_array_of_generation = []
-        for n in range(npop):
+        for n in range(len(generations[0])): 
             fitness_array_of_generation.append(ordered_population(generations[i])[n][1][0])
 
         average_fitness.append(np.mean(fitness_array_of_generation))
@@ -212,9 +206,10 @@ def write_results(run):
     file_results.write('Average standard deviation of the fitness over the generations of this run: ' + str(np.mean(std_fitness)) + '\n\n')
     file_results.close()
 
-def perform_run():
-    
+def perform_run(n_pop, difference_threshold):
+
     print('Generation 1')
+
     pioneers = spawn(n_pop)
     add_individuals_to_population(pioneers)
     generations = []
@@ -225,16 +220,12 @@ def perform_run():
 
     while no_improvement < difference_threshold: 
 
-        print("Generation" + str(len(generations)))
-        
-        newborns = mate()
-        
+        newborns = mate()        
         add_individuals_to_population(newborns)
-
-        select_survivors(n_deaths)
-
+        select_survivors()
         generations.append(population.copy())
 
+        print("Generation" + str(len(generations)))
         print("Difference:")
         print(difference(generations[-1], generations[-2])) # compare two last generations
         print_ordered_population_nicely()
@@ -247,17 +238,23 @@ def perform_run():
             no_improvement += 1
         print('\nNo improvement: '+str(no_improvement))
 
-def main():
+    return generations
+
+def main(n_pop = 100, difference_threshold = 3, n_runs = 10):
+# if there is no significant improvement after .. generations, then terminate 
       
     for run in range(n_runs):
         
         print('RUN: ' + str(run))
 
-        perform_run()
+        generations = perform_run(n_pop, difference_threshold)
 
-        write_results(run)
-        
+        write_results(run, generations)
+
+        global population
         population = {}
 
     fim = time.time() # prints total execution time for experiment
     print( '\nExecution time: '+str(round((fim-ini)/60))+' minutes \n')
+
+main(10,3,1)
