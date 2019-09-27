@@ -2,7 +2,6 @@
 # Freek Stroes, Thijs Roukens, Sebastian Smit, Judith Schermer
 # 27 September 2019
 
-
 # Code until ##### OWN PART ##### is taken from EvoMan FrameWork - V1.0 2016 by Karine Miras
 
 # imports framework
@@ -87,10 +86,10 @@ def spawn(size):  # a prespecified number (''size'') of individuals is spawned
 def fitness(individual):
     return simulation(env, individual)
 
-# returns the population as a list of triples, i.e. 
-# [(ID,fitness,list_of_values), (ID,fitness,list_of_values),....]
-# note: fitness in decreasing order, so starting with fittest individual
 def ordered_population(population):
+    # returns the population as a list of tuples i.e. 
+    # [(ID,[fitness,list_of_values]), (ID,[fitness,list_of_values]),....]
+    # note: fitness in decreasing order, so starting with fittest individual
     return sorted(population.items(), key = lambda kv:kv[1][0], reverse=True) 
     # e.g. kv[1]=(fitness,individual). kv[1][0] is the fitness and fitness is used to sort the list. 
 
@@ -132,7 +131,7 @@ def mate():
     return newborns
 
 
-def select_survivors():  # this method kills a specified number of the least fit individuals
+def select_survivors():  # this method kills a specified number of the least fit individual
     global population
     n_deaths = int(len(population)/5)*2 # number of individuals that dies each generation
     deaths = ordered_population(population)[::-1][:n_deaths] # we take the first n_deaths elements
@@ -143,7 +142,6 @@ def select_survivors():  # this method kills a specified number of the least fit
         print("strategy " + str(key) + " died")
 
 def add_individuals_to_population(new_individuals):
-
     for individual in new_individuals:
         global id_individual, population
         population[id_individual] = [fitness(individual), individual]
@@ -154,7 +152,8 @@ def print_ordered_population_nicely():
     for key,value in ordered_population(population):
         print(key,value[0]), #print only the individual ID and the fitness
 
-def difference(generation, previous_generation):
+def difference(generation, previous_generation): #computes difference in fitnesses between 
+# two generations using sum of differences between ranked individuals
         differences = []
         
         ordered_1 = ordered_population(generation)
@@ -168,6 +167,7 @@ def difference(generation, previous_generation):
             differences.append(difference_in_fitness)
 
         return sum(differences)
+
 
 def get_max_fitness(population1):
     max_value = -1000
@@ -189,19 +189,27 @@ def write_results(run, generations):
 
     file_results.write('RUN ' + str(run) + '\n\n')
     file_results.write('# of generations: ' + str(len(generations)) + '\n')
+
     file_results.write('Best fitness: ' + str(ordered_population(generations[-1])[0][1][0]) + '\n\n')
 
     average_fitness = []
     std_fitness = []
 
-    for i in range(len(generations)):
+    for generation in generations:
         fitness_array_of_generation = []
-        for n in range(len(generations[0])): 
-            fitness_array_of_generation.append(ordered_population(generations[i])[n][1][0])
-
+        # we sum the fitnesses of all individuals in this generation
+        ordered_pop = ordered_population(generation)
+        n_pop = len(generations[0])
+        for i in range(n_pop): 
+            individual = ordered_pop[i]
+            ind_fitness, weights = individual[1]
+            fitness_array_of_generation.append(ind_fitness)
+        # we append the average fitness for this generation 
         average_fitness.append(np.mean(fitness_array_of_generation))
+        # we append the standard deviation in the fitness for this generation 
         std_fitness.append(np.std(fitness_array_of_generation))
 
+    # we compute the average fitness of all generations, by averaging the averages... same for standard deviation...
     file_results.write('Average of the fitness over the generations of this run: ' + str(np.mean(average_fitness)) + '\n')
     file_results.write('Average standard deviation of the fitness over the generations of this run: ' + str(np.mean(std_fitness)) + '\n\n')
     file_results.close()
@@ -218,6 +226,8 @@ def perform_run(n_pop, difference_threshold):
 
     old_best_fitness = get_max_fitness(population)
 
+
+    # if there is no significant improvement after .. generations, then terminate 
     while no_improvement < difference_threshold: 
 
         newborns = mate()        
@@ -241,7 +251,6 @@ def perform_run(n_pop, difference_threshold):
     return generations
 
 def main(n_pop = 100, difference_threshold = 3, n_runs = 10):
-# if there is no significant improvement after .. generations, then terminate 
       
     for run in range(n_runs):
         
