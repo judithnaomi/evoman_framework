@@ -1,6 +1,6 @@
 # Assignment 1 Evolutionary Computing
 # Freek Stroes, Thijs Roukens, Sebastian Smit, Judith Schermer
-# 18 September 2019
+# 27 September 2019
 
 
 # Code until ##### OWN PART ##### is taken from EvoMan FrameWork - V1.0 2016 by Karine Miras
@@ -48,22 +48,19 @@ run_mode = 'train'  # train or test
 
 n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
-dom_u = 1
-dom_l = -1
+
 npop = 5
-gens = 30
-mutation = 0.2
-last_best = 0
+
 
 ################################### OWN PART ###########################################
 
-runs=2
-n_generations = 4
-difference_threshold = 3
+runs = 2
+
+difference_threshold = 3 # if there is no significant improvement after .. generations, then terminate
 
 n_deaths = int(npop/5)*2 # number of individuals that dies each generation
 
-id_individual = 0 # the ids of the new individuals only increase
+id_individual = 0 # the id of the newest individual
 
 population = {}  # population is a dictionary with keys individual IDs
 #and values are tuples where the first element is the fitness value and 
@@ -110,10 +107,10 @@ def ordered_population(population):
 def mate():
     newborns = []
     pop = ordered_population(population)
-    random_numbers = list(range(0, npop )) #generates a list counting from 0 up to and including npop -1
+    random_numbers = list(range(0, npop)) #generates a list counting from 0 up to and including npop -1
     rand.shuffle(random_numbers) #shuffle the numbers
 
-    for i in range(0, len(pop), 5):
+    for i in range(0, len(pop), 5): #in steps of 5
         five_random = [random_numbers[i], random_numbers[i + 1], random_numbers[i + 2], random_numbers[i + 3], random_numbers[i + 4]] #makes a list with 5 random numbers
         five_random.sort() # sorts these number from low to high
 
@@ -141,8 +138,6 @@ def mate():
         newborns.append(genotype_child1)
         newborns.append(genotype_child2)# offspring is added to the population (born).
     return newborns
-
-
 
 
 def perform_selection(n_deaths):  # this method kills a specified number of the least fit individuals
@@ -178,9 +173,6 @@ def difference(generation, previous_generation):
             difference_in_fitness = abs(value1[0]-value2[0])
             differences.append(difference_in_fitness)
 
-        
-        #return np.exp((sum([x**2 for x in differences]))) 
-        #difference measured by the sum of squares
         return sum(differences)
 
 def get_max_fitness(population1):
@@ -193,65 +185,20 @@ def get_max_fitness(population1):
         else:
             max_value = max_value
     return max_value
-      
-for run in range(1,runs+1):
-    print('RUN: ' + str(run))
-    ############ INITIALIZE POPULATION ###################
 
-    print('Generation 1')
-    pioneers = spawn(npop)
-
-    add_individuals_to_population(pioneers)
-
-    ############ MAIN PROGRAM ########################
-
-    generations = []
-    generations.append(population.copy())
-
-    print('\nGeneration 2')
-    newborns = mate()
-    add_individuals_to_population(newborns)
-    perform_selection(n_deaths)
-    generations.append(population.copy())
-
-    i = 1
-    no_improvement = 0
-    old_best_fitness = get_max_fitness(population)
-
-    while difference_threshold > no_improvement:
-        i = i + 1
-        print("Generation" + str(i))
-        newborns = mate()
-        add_individuals_to_population(newborns)
-
-        perform_selection(n_deaths)
-
-        generations.append(population.copy())
-        print("Difference:")
-        print(difference(generations[i], generations[i - 1]))
-        print_ordered_population_nicely()
-        best_fitness = get_max_fitness(population)
-        if best_fitness > old_best_fitness:
-            old_best_fitness = best_fitness
-            no_improvement = 0
-        else:
-            old_best_fitness = old_best_fitness
-            no_improvement += 1
-        print(no_improvement)
-
-    # print('\n', ordered_population(generations[n_generations-1])[0][1])
+def write_results(run):
     if run == 1:
         file_results = open(experiment_name+'/results.txt', 'w')
         file_results.write('Tested Enemy: ' + str(enemy) + '\n')
     else:
         file_results = open(experiment_name+'/results.txt', 'a')
     file_results.write('RUN ' + str(run) + '\n\n')
-    file_results.write('# of generations: ' + str(n_generations) + '\n')
-    file_results.write('Best fitness: ' + str(ordered_population(generations[n_generations-1])[0][1][0]) + '\n\n')
+    file_results.write('# of generations: ' + str(len(generations)) + '\n')
+    file_results.write('Best fitness: ' + str(ordered_population(generations[-1])[0][1][0]) + '\n\n')
 
     average_fitness = []
     std_fitness = []
-    for i in range(n_generations):
+    for i in range(len(generations)):
         fitness_array_of_generation = []
         for n in range(npop):
             fitness_array_of_generation.append(ordered_population(generations[i])[n][1][0])
@@ -263,6 +210,61 @@ for run in range(1,runs+1):
     file_results.write('Average standard deviation of the fitness over the generations of this run: ' + str(np.mean(std_fitness)) + '\n\n')
     file_results.close()
 
+      
+for run in range(1,runs+1):
+    
+    print('RUN: ' + str(run))
+    
+    ############ INITIALIZE POPULATION ###################
+
+    print('Generation 1')
+    pioneers = spawn(npop)
+
+    add_individuals_to_population(pioneers)
+
+    generations = []
+
+    generations.append(population.copy())
+
+    #print('\nGeneration 2')
+    #newborns = mate()
+    #add_individuals_to_population(newborns)
+    #perform_selection(n_deaths)
+    #generations.append(population.copy())
+
+    #i = 1
+    no_improvement = 0 # amount of generations that have not been improving
+
+    old_best_fitness = get_max_fitness(population)
+
+    while no_improvement < difference_threshold: 
+        #i = i + 1
+        print("Generation" + str(len(generations)))
+        
+        newborns = mate()
+        
+        add_individuals_to_population(newborns)
+
+        perform_selection(n_deaths)
+
+        generations.append(population.copy())
+
+        print("Difference:")
+        print(difference(generations[-1], generations[-2])) # compare two last generations
+        print_ordered_population_nicely()
+
+        best_fitness = get_max_fitness(population)
+        if best_fitness > old_best_fitness:
+            old_best_fitness = best_fitness
+            no_improvement = 0
+        else:
+            old_best_fitness = old_best_fitness
+            no_improvement += 1
+        print(no_improvement)
+
+
+    write_results(run)
+    
     population = {}
 
 fim = time.time() # prints total execution time for experiment
