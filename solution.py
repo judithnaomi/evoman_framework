@@ -49,16 +49,16 @@ run_mode = 'train'  # train or test
 n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
 
-npop = 5
+n_pop = 5
 
 
 ################################### OWN PART ###########################################
 
-runs = 2
+n_runs = 2
 
 difference_threshold = 3 # if there is no significant improvement after .. generations, then terminate
 
-n_deaths = int(npop/5)*2 # number of individuals that dies each generation
+n_deaths = int(n_pop/5)*2 # number of individuals that dies each generation
 
 id_individual = 0 # the id of the newest individual
 
@@ -114,7 +114,7 @@ def mate():
         five_random = [random_numbers[i], random_numbers[i + 1], random_numbers[i + 2], random_numbers[i + 3], random_numbers[i + 4]] #makes a list with 5 random numbers
         five_random.sort() # sorts these number from low to high
 
-        #the first mating pair; chosing the lowest random number automatically gives the one with the highest fitnes becaus pop is ordered on fitness
+        #the first mating pair; chosing the lowest random number automatically gives the one with the highest fitness becaus pop is ordered on fitness
         key_dad1, value_dad1 = pop[five_random[0]]
         key_mom1, value_mom1 = pop[five_random[1]]
 
@@ -140,9 +140,9 @@ def mate():
     return newborns
 
 
-def perform_selection(n_deaths):  # this method kills a specified number of the least fit individuals
-    deaths = ordered_population(population)[::-1][:n_deaths] #we take the first n_deaths elements
-    #of the inverted population list, the weakest individuals
+def select_survivors(n_deaths):  # this method kills a specified number of the least fit individuals
+    deaths = ordered_population(population)[::-1][:n_deaths] # we take the first n_deaths elements
+    #of the inverted population list: the weakest individuals
    
     for key,value in deaths:
         del population[key]
@@ -192,12 +192,14 @@ def write_results(run):
         file_results.write('Tested Enemy: ' + str(enemy) + '\n')
     else:
         file_results = open(experiment_name+'/results.txt', 'a')
+
     file_results.write('RUN ' + str(run) + '\n\n')
     file_results.write('# of generations: ' + str(len(generations)) + '\n')
     file_results.write('Best fitness: ' + str(ordered_population(generations[-1])[0][1][0]) + '\n\n')
 
     average_fitness = []
     std_fitness = []
+
     for i in range(len(generations)):
         fitness_array_of_generation = []
         for n in range(npop):
@@ -210,42 +212,26 @@ def write_results(run):
     file_results.write('Average standard deviation of the fitness over the generations of this run: ' + str(np.mean(std_fitness)) + '\n\n')
     file_results.close()
 
-      
-for run in range(1,runs+1):
+def perform_run():
     
-    print('RUN: ' + str(run))
-    
-    ############ INITIALIZE POPULATION ###################
-
     print('Generation 1')
-    pioneers = spawn(npop)
-
+    pioneers = spawn(n_pop)
     add_individuals_to_population(pioneers)
-
     generations = []
-
     generations.append(population.copy())
-
-    #print('\nGeneration 2')
-    #newborns = mate()
-    #add_individuals_to_population(newborns)
-    #perform_selection(n_deaths)
-    #generations.append(population.copy())
-
-    #i = 1
     no_improvement = 0 # amount of generations that have not been improving
 
     old_best_fitness = get_max_fitness(population)
 
     while no_improvement < difference_threshold: 
-        #i = i + 1
+
         print("Generation" + str(len(generations)))
         
         newborns = mate()
         
         add_individuals_to_population(newborns)
 
-        perform_selection(n_deaths)
+        select_survivors(n_deaths)
 
         generations.append(population.copy())
 
@@ -258,14 +244,20 @@ for run in range(1,runs+1):
             old_best_fitness = best_fitness
             no_improvement = 0
         else:
-            old_best_fitness = old_best_fitness
             no_improvement += 1
         print('\nNo improvement: '+str(no_improvement))
 
+def main():
+      
+    for run in range(n_runs):
+        
+        print('RUN: ' + str(run))
 
-    write_results(run)
-    
-    population = {}
+        perform_run()
 
-fim = time.time() # prints total execution time for experiment
-print( '\nExecution time: '+str(round((fim-ini)/60))+' minutes \n')
+        write_results(run)
+        
+        population = {}
+
+    fim = time.time() # prints total execution time for experiment
+    print( '\nExecution time: '+str(round((fim-ini)/60))+' minutes \n')
