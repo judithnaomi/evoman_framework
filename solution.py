@@ -237,7 +237,7 @@ for run in range(1,runs+1):
         else:
             old_best_fitness = old_best_fitness
             no_improvement += 1
-        print(no_improvement)
+        print('\nNo improvement: '+str(no_improvement))
 
     # print('\n', ordered_population(generations[n_generations-1])[0][1])
     if run == 1:
