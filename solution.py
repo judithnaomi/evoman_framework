@@ -266,4 +266,4 @@ def main(n_pop = 100, difference_threshold = 3, n_runs = 10):
     fim = time.time() # prints total execution time for experiment
     print( '\nExecution time: '+str(round((fim-ini)/60))+' minutes \n')
 
-main(10,3,1)
+main(15,3,1)
