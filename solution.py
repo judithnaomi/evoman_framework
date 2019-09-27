@@ -59,7 +59,7 @@ last_best = 0
 
 runs=2
 n_generations = 4
-#difference_threshold = 40
+difference_threshold = 3
 
 n_deaths = int(npop/5)*2 # number of individuals that dies each generation
 
@@ -182,6 +182,17 @@ def difference(generation, previous_generation):
         #return np.exp((sum([x**2 for x in differences]))) 
         #difference measured by the sum of squares
         return sum(differences)
+
+def get_max_fitness(population1):
+    max_value = -1000
+    population = ordered_population(population1)
+    for i in range(len(population)):
+        key1, value1 = population[i]
+        if value1[0] > max_value:
+            max_value = value1[0]
+        else:
+            max_value = max_value
+    return max_value
       
 for run in range(1,runs+1):
     print('RUN: ' + str(run))
@@ -203,24 +214,30 @@ for run in range(1,runs+1):
     perform_selection(n_deaths)
     generations.append(population.copy())
 
-    #for i in range(n_generations):
+    i = 1
+    no_improvement = 0
+    old_best_fitness = get_max_fitness(population)
 
-    #i=1
-    # while difference(generations[i],generations[i-1])>difference_threshold:
-        # i = i + 1
-
-    for i in range(n_generations-2):        # We construct the first 2 generations outside the for loop
-        print("\nGeneration " + str(i+3))
-
+    while difference_threshold > no_improvement:
+        i = i + 1
+        print("Generation" + str(i))
         newborns = mate()
         add_individuals_to_population(newborns)
 
         perform_selection(n_deaths)
 
         generations.append(population.copy())
-        # print("Difference:")
-        # print(difference(generations[i], generations[i-1]))
-        # print_ordered_population_nicely()
+        print("Difference:")
+        print(difference(generations[i], generations[i - 1]))
+        print_ordered_population_nicely()
+        best_fitness = get_max_fitness(population)
+        if best_fitness > old_best_fitness:
+            old_best_fitness = best_fitness
+            no_improvement = 0
+        else:
+            old_best_fitness = old_best_fitness
+            no_improvement += 1
+        print(no_improvement)
 
     # print('\n', ordered_population(generations[n_generations-1])[0][1])
     if run == 1:
