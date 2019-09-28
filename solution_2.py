@@ -52,6 +52,7 @@ n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilay
 
 
 delta = 0.05
+upsilon = 0.005
 npop = 100
 max_stagnation = 3
 n_runs = 3
@@ -117,9 +118,10 @@ def mate():
                        random_numbers[i + 4]]  # makes a list with 5 random numbers
         five_random.sort()  # sorts these number from low to high
 
-        # the first mating pair; chosing the lowest random number automatically gives the one with the highest fitness becaus pop is ordered on fitness
+        # the first mating pair; choosing the lowest random number automatically gives the one with the highest fitness because pop is ordered on fitness
         key_dad1, value_dad1 = pop[five_random[0]]
         key_mom1, value_mom1 = pop[five_random[1]]
+
 
         # the second mating pair
         key_dad2, value_dad2 = pop[five_random[2]]
@@ -129,10 +131,17 @@ def mate():
         genotype_child1 = (value_mom1[1] + value_dad1[1]) / 2
         genotype_child2 = (value_mom2[1] + value_dad2[1]) / 2
 
-        gene_mutations1 = [rand.uniform(-delta,delta) for x in
+        ##vanaf hier is het anders dan solution1
+        delta_child1 = delta_mom1 + delta_dad1 /2 + rand.uniform(-upsilon,upsilon)
+        delta_child2 = delta_mom2 + delta_dad2 / 2 + rand.uniform(-upsilon, upsilon)
+
+
+
+        gene_mutations1 = [rand.uniform(-delta_child1,delta_child1) for x in
                            range(n_vars)]  # creates some random numbers between -.1 and .1
-        gene_mutations2 = [rand.uniform(-delta,delta) for x in
+        gene_mutations2 = [rand.uniform(-delta_child2,delta_child2) for x in
                            range(n_vars)]
+        #tot hier op het feit na dat de delta van het kind nog opgeslagen moet worden
 
         genotype_child1 = keep_within_boundaries(np.add(gene_mutations1, genotype_child1), -1, 1)
         genotype_child2 = keep_within_boundaries(np.add(gene_mutations2, genotype_child2), -1, 1)
