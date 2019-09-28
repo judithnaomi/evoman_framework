@@ -18,6 +18,7 @@ import time
 import numpy as np
 from math import fabs, sqrt
 import glob, os
+import csv
 
 experiment_name = 'assignment_specialist1'  # Assignment task 1
 enemy = 2  # Set correct enemy to run in this solution
@@ -219,18 +220,35 @@ def write_results(run, generations, average_fit , best_fitness , standard_deviat
 
     # we compute the average fitness of all generations, by averaging the averages... same for standard deviation...
     file_results.write(
-        'Average of the fitness over the generations of this run: ' + str(np.mean(average_fit)) + '\n')
+        'Average of the fitness over the generations of this run: ' + str(np.mean(average_fit[1:])) + '\n')
     file_results.write('Average standard deviation of the fitness over the generations of this run: ' + str(
-        np.mean(sd_fitness)) + '\n\n')
+        np.mean(sd_fitness[1:])) + '\n\n')
 
     file_results.write('List with best fitness over the generations: \n ' + str(best_fitness) + '\n')
     file_results.write('List with average fitness over the generations: \n' + str(average_fit) +'\n')
     file_results.write('List with standard deviation of the weights over the generations: \n ' + str(standard_deviation) +'\n')
-    file_results.write('List with average playerlife over the generations: \n' + str(playerlife) + '\n\n')
+    file_results.write('List with average playerlife over the generations: \n' + str(playerlife) + '\n')
+    file_results.write('List with standard deviation of the fitness over the generations: \n' + str(sd_fitness) + '\n\n')
     file_results.close()
 
+def csv_results (run, average_fit , best_fitness , standard_deviation, playerlife, sd_fitness):
+    if run == 1:
+        csv_results = open(experiment_name + '/results.csv', 'w')
+    else:
+        csv_results = open(experiment_name + '/results.csv', 'a')
+    writer = csv.writer(csv_results)
+    writer.writerows([average_fit])
+    writer.writerows([best_fitness])
+    writer.writerows([standard_deviation])
+    writer.writerows([playerlife])
+    writer.writerows([sd_fitness])
+    csv_results.close()
 
-def perform_run(n_pop, difference_threshold):
+
+
+
+
+def perform_run(n_pop, difference_threshold, run, enemy):
     print('Generation 1')
 
     pioneers = spawn(n_pop)
@@ -243,15 +261,15 @@ def perform_run(n_pop, difference_threshold):
 
    # old_average_fitness = get_average_fitness(population)
     n_deaths = int(n_pop / 5) * 2
-    list_average_fitness = []
+    list_average_fitness = ['AF'+ str(enemy)+str(run)]
     list_average_fitness.append(get_average_fitness(population))
-    list_best_fitness = []
+    list_best_fitness = ['BF' + str(enemy)+str(run)]
     list_best_fitness.append(old_best_fitness)
-    list_sd_weights = []
+    list_sd_weights = ['SW' + str(enemy)+str(run)]
     list_sd_weights.append(get_sd_generation(population))
-    list_average_playerlife = []
+    list_average_playerlife = ['AP'+ str(enemy) +str(run)]
     list_average_playerlife.append(get_average_playerlife(population))
-    list_sd_fitness = []
+    list_sd_fitness = ['SF'+ str(enemy) +str(run)]
     list_sd_fitness.append(get_sd_fitness(population))
 
     # if there is no significant improvement after .. generations, then terminate
@@ -284,16 +302,18 @@ def perform_run(n_pop, difference_threshold):
 
 
 def main(n_pop, difference_threshold, n_runs):
-    for run in range(n_runs):
+    for run in range(1,n_runs+1):
         print('RUN: ' + str(run))
 
-        generations, average_fitness, best_fitness, sd_weights, average_playerlife, sd_fitness = perform_run(n_pop, difference_threshold)
+        generations, average_fitness, best_fitness, sd_weights, average_playerlife, sd_fitness = perform_run(n_pop, difference_threshold, run, enemy)
 
         write_results(run, generations, average_fitness, best_fitness , sd_weights, average_playerlife, sd_fitness)
+        csv_results(run, average_fitness, best_fitness, sd_weights, average_playerlife,sd_fitness)
 
         global population, id_individual
         population = {}
         id_individual = 0
+
         print (average_fitness)
         print('\n')
         print (best_fitness)
@@ -309,4 +329,4 @@ def main(n_pop, difference_threshold, n_runs):
     print('\nExecution time: ' + str(round((fim - ini) / 60)) + ' minutes \n')
 
 
-main(15, 3, 2)
+main(5, 3, 2)
