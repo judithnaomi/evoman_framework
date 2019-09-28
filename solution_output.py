@@ -213,6 +213,7 @@ def write_results(run, generations, average_fit , best_fitness , standard_deviat
 
     file_results.write('RUN ' + str(run) + '\n\n')
     file_results.write('# of generations: ' + str(len(generations)) + '\n')
+    file_results.write('# of fitness evaluations: ' + str(id_individual) + '\n')
 
     file_results.write('Best fitness: ' + str(ordered_population(generations[-1])[0][1][0]) + '\n\n')
 
@@ -239,6 +240,8 @@ def perform_run(n_pop, difference_threshold):
     no_improvement = 0  # amount of generations that have not been improving
 
     old_best_fitness = ordered_population(population)[0][1][0]
+
+   # old_average_fitness = get_average_fitness(population)
     n_deaths = int(n_pop / 5) * 2
     list_average_fitness = []
     list_average_fitness.append(get_average_fitness(population))
@@ -261,6 +264,7 @@ def perform_run(n_pop, difference_threshold):
         print_ordered_population_nicely()
 
         best_fitness = ordered_population(population)[0][1][0]
+        #average_fitness = get_average_fitness(population)
         if best_fitness > old_best_fitness:
             old_best_fitness = best_fitness
             no_improvement = 0
@@ -287,8 +291,9 @@ def main(n_pop, difference_threshold, n_runs):
 
         write_results(run, generations, average_fitness, best_fitness , sd_weights, average_playerlife, sd_fitness)
 
-        global population
+        global population, id_individual
         population = {}
+        id_individual = 0
         print (average_fitness)
         print('\n')
         print (best_fitness)
@@ -304,4 +309,4 @@ def main(n_pop, difference_threshold, n_runs):
     print('\nExecution time: ' + str(round((fim - ini) / 60)) + ' minutes \n')
 
 
-main(15, 3, 1)
+main(15, 3, 2)
