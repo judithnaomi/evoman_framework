@@ -44,11 +44,11 @@ ini = time.time()  # sets time marker
 
 # genetic algorithm params
 
-run_mode = 'train'  # train or test
-
 n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
-
+npop = 5
+no_improvements = 3
+runs = 2
 ################################### OWN PART ###########################################
 
 population = {}  # population is a dictionary with keys individual IDs
@@ -329,4 +329,4 @@ def main(n_pop, difference_threshold, n_runs):
     print('\nExecution time: ' + str(round((fim - ini) / 60)) + ' minutes \n')
 
 
-main(5, 3, 2)
+main(npop, no_improvements, runs)
