@@ -20,7 +20,7 @@ from math import fabs, sqrt
 import glob, os
 import csv
 
-experiment_name = 'specialist_enemy1_Algoritme1'  # Assignment task 1
+experiment_name = 'test'  # Assignment task 1
 enemy = 1  # Set correct enemy to run in this solution
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
@@ -46,9 +46,9 @@ ini = time.time()  # sets time marker
 
 n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
-npop = 15
-no_improvements = 3
-runs = 2
+npop = 100
+no_improvements = 5
+runs = 10
 upsilon = 0.05
 delta = 0.2
 ################################### OWN PART ###########################################
@@ -212,6 +212,15 @@ def get_average_playerlife(population): # gets the average playerlife of the pop
     average_playerlife = sum_playerlife/len(order_population)
     return average_playerlife
 
+def get_sd_playerlife(population):
+    order_pop = ordered_population(population)
+    sd_list = []
+    for i in range(len(order_pop)):
+        key, value = order_pop[i]
+        sd_list.append(value[1])
+    sd_playerlife = np.std(sd_list)
+    return sd_playerlife
+
 def get_average_delta(population): # get the average delta of the population
     sum_delta = 0
     order_population = ordered_population(population)
@@ -221,7 +230,7 @@ def get_average_delta(population): # get the average delta of the population
     average_delta = sum_delta/len(order_population)
     return average_delta
 
-def write_results(run, generations, average_fit , best_fitness , standard_deviation, playerlife, sd_fitness, average_delta):
+def write_results(run, generations, average_fit , best_fitness , standard_deviation, playerlife, sd_fitness, average_delta, sd_playerlife):
     if run == 1:
         file_results = open(experiment_name + '/results.txt', 'w')
         file_results.write('Tested Enemy: ' + str(enemy) + '\n')
@@ -244,11 +253,12 @@ def write_results(run, generations, average_fit , best_fitness , standard_deviat
     file_results.write('List with average fitness over the generations: \n' + str(average_fit) +'\n')
     file_results.write('List with standard deviation of the weights over the generations: \n ' + str(standard_deviation) +'\n')
     file_results.write('List with average playerlife over the generations: \n' + str(playerlife) + '\n')
-    file_results.write('List with standard deviation of the fitness over the generations: \n' + str(sd_fitness) + '\n\n')
-    file_results.write('List with average Delta over the generations: \n' + str(average_delta) + '\n\n')
+    file_results.write('List with standard deviation of the fitness over the generations: \n' + str(sd_fitness) + '\n')
+    file_results.write('List with average Delta over the generations: \n' + str(average_delta) + '\n')
+    file_results.write('List with standard deviation of the playerlife over the generations: \n' + str(sd_playerlife) + '\n\n')
     file_results.close()
 
-def csv_results (run, average_fit , best_fitness , standard_deviation, playerlife, sd_fitness, average_delta):
+def csv_results (run, average_fit , best_fitness , standard_deviation, playerlife, sd_fitness, average_delta, sd_playerlife):
     if run == 1:
         csv_results = open(experiment_name + '/results.csv', 'w')
     else:
@@ -260,6 +270,7 @@ def csv_results (run, average_fit , best_fitness , standard_deviation, playerlif
     writer.writerows([playerlife])
     writer.writerows([sd_fitness])
     writer.writerows([average_delta])
+    writer.writerows([sd_playerlife])
     csv_results.close()
 
 
@@ -290,6 +301,8 @@ def perform_run(n_pop, difference_threshold, run, enemy):
     list_sd_fitness.append(get_sd_fitness(population))
     list_average_delta = ['AD' + str(enemy) + str(run)]
     list_average_delta.append(get_average_delta(population))
+    list_sd_playerlife = ['SP' + str(enemy) + str(run)]
+    list_sd_playerlife.append(get_sd_playerlife(population))
 
     # if there is no significant improvement after .. generations, then terminate
     while no_improvement < difference_threshold:
@@ -314,21 +327,19 @@ def perform_run(n_pop, difference_threshold, run, enemy):
         list_average_playerlife.append(get_average_playerlife(population))
         list_sd_fitness.append(get_sd_fitness(population))
         list_average_delta.append(get_average_delta(population))
+        list_sd_playerlife.append(get_sd_playerlife(population))
 
-
-
-
-    return generations, list_average_fitness, list_best_fitness, list_sd_weights, list_average_playerlife, list_sd_fitness, list_average_delta
+    return generations, list_average_fitness, list_best_fitness, list_sd_weights, list_average_playerlife, list_sd_fitness, list_average_delta, list_sd_playerlife
 
 
 def main(n_pop, difference_threshold, n_runs):
     for run in range(1,n_runs+1):
         print('RUN: ' + str(run))
 
-        generations, average_fitness, best_fitness, sd_weights, average_playerlife, sd_fitness, average_delta = perform_run(n_pop, difference_threshold, run, enemy)
+        generations, average_fitness, best_fitness, sd_weights, average_playerlife, sd_fitness, average_delta, sd_playerlife = perform_run(n_pop, difference_threshold, run, enemy)
 
-        write_results(run, generations, average_fitness, best_fitness , sd_weights, average_playerlife, sd_fitness, average_delta)
-        csv_results(run, average_fitness, best_fitness, sd_weights, average_playerlife,sd_fitness, average_delta)
+        write_results(run, generations, average_fitness, best_fitness , sd_weights, average_playerlife, sd_fitness, average_delta, sd_playerlife)
+        csv_results(run, average_fitness, best_fitness, sd_weights, average_playerlife,sd_fitness, average_delta, sd_playerlife)
 
         global population, id_individual
         population = {}
