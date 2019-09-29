@@ -20,8 +20,8 @@ from math import fabs, sqrt
 import glob, os
 import csv
 
-experiment_name = 'assignment_specialist1'  # Assignment task 1
-enemy = 2  # Set correct enemy to run in this solution
+experiment_name = 'specialist_enemy7_Algoritme1'  # Assignment task 1
+enemy = 7  # Set correct enemy to run in this solution
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
@@ -46,9 +46,9 @@ ini = time.time()  # sets time marker
 
 n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
-npop = 5
-no_improvements = 3
-runs = 2
+npop = 100
+no_improvements = 5
+runs = 10
 ################################### OWN PART ###########################################
 
 population = {}  # population is a dictionary with keys individual IDs
@@ -205,12 +205,8 @@ def get_average_playerlife(population):
 
 
 
-def write_results(run, generations, average_fit , best_fitness , standard_deviation, playerlife, sd_fitness):
-    if run == 1:
-        file_results = open(experiment_name + '/results.txt', 'w')
-        file_results.write('Tested Enemy: ' + str(enemy) + '\n')
-    else:
-        file_results = open(experiment_name + '/results.txt', 'a')
+def write_results(file_results, run, generations, average_fit , best_fitness , standard_deviation, playerlife, sd_fitness):
+    file_results = open(experiment_name + '/results.txt', 'a')
 
     file_results.write('RUN ' + str(run) + '\n\n')
     file_results.write('# of generations: ' + str(len(generations)) + '\n')
@@ -229,7 +225,6 @@ def write_results(run, generations, average_fit , best_fitness , standard_deviat
     file_results.write('List with standard deviation of the weights over the generations: \n ' + str(standard_deviation) +'\n')
     file_results.write('List with average playerlife over the generations: \n' + str(playerlife) + '\n')
     file_results.write('List with standard deviation of the fitness over the generations: \n' + str(sd_fitness) + '\n\n')
-    file_results.close()
 
 def csv_results (run, average_fit , best_fitness , standard_deviation, playerlife, sd_fitness):
     if run == 1:
@@ -302,12 +297,15 @@ def perform_run(n_pop, difference_threshold, run, enemy):
 
 
 def main(n_pop, difference_threshold, n_runs):
+    file_results = open(experiment_name + '/results.txt', 'w')
+    file_results.write('Tested Enemy: ' + str(enemy) + '\n')
+
     for run in range(1,n_runs+1):
         print('RUN: ' + str(run))
 
         generations, average_fitness, best_fitness, sd_weights, average_playerlife, sd_fitness = perform_run(n_pop, difference_threshold, run, enemy)
 
-        write_results(run, generations, average_fitness, best_fitness , sd_weights, average_playerlife, sd_fitness)
+        write_results(file_results, run, generations, average_fitness, best_fitness , sd_weights, average_playerlife, sd_fitness)
         csv_results(run, average_fitness, best_fitness, sd_weights, average_playerlife,sd_fitness)
 
         global population, id_individual
@@ -324,6 +322,7 @@ def main(n_pop, difference_threshold, n_runs):
         print('\n')
         print(sd_fitness)
 
+    file_results.close()
 
     fim = time.time()  # prints total execution time for experiment
     print('\nExecution time: ' + str(round((fim - ini) / 60)) + ' minutes \n')
