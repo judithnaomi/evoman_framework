@@ -11,6 +11,26 @@ ENEMIES = [1,3,5,7] # enemies that we battle against!!
 ALGORITHMS = [1] # algorithms that we test! can be either 1 or 2 or both
 MAX_NO_GENERATIONS = 50 
 
+def boxplot_of_all_runs(enemy_id, algorithm_id):
+	# makes a boxplot of the best fitness values, 1 dot in boxplot corresponds to 1 run
+
+	directory = 'specialist_enemy' + str(enemy_id) + '_Algoritme' + str(algorithm_id) # format is 'specialist_enemy5_Algoritme1'
+	lines = open(directory + '/results.txt').readlines()
+
+	bf = []
+	for line in lines: 
+		if line.startswith("Best fitness:"): 
+			bf_run = line.split()[2] 
+			bf.append(bf_run)
+
+	print(bf)
+	bf = np.array(bf).astype(np.float)
+
+	plt.boxplot(bf)
+
+#	plt.savefig('boxplot_best_fitness_' + 'alg_' + str(algorithm_id) +'_en_' + str(enemy_id) + '.png')
+#	plt.show()
+
 def average_over_runs(enemy_id, algorithm_id):
 	# makes a line plot of the average fitness over 10 runs against enemy_id using algorithm_id
 
@@ -45,8 +65,9 @@ def average_over_runs(enemy_id, algorithm_id):
 
 def main():
 	# for each algorithm, for each enemy, we plot a line, that represents
-	# the average fitness over the 10 runs
+	# the average fitness over the 10 runs. # all enemies come in 1 figure. 1 figure per algorithm.
 	for algorithm_id in ALGORITHMS:
+		plt.figure()
 		for enemy_id in ENEMIES:
 			fit_avgs = average_over_runs(enemy_id, algorithm_id)
 			plt.plot(fit_avgs, label= 'enemy' + str(enemy_id))
@@ -56,8 +77,19 @@ def main():
 		plt.legend()
 		plt.savefig('avg_player_life_' + 'alg_' + str(algorithm_id) + '.png')
 		plt.show()
+
+	# 1 figure per enemy (since enemies differ a lot, it is ugly to plot all enemies in 1 boxplot).
+	# 2 algorithms per figure
+	for enemy_id in ENEMIES:
+		plt.figure()
+		for algorithm_id in ALGORITHMS:
+
+			boxplot_of_all_runs(enemy_id, algorithm_id)
+
+		plt.title("Boxplot of best fitness enemy " + str(enemy_id))
+		plt.ylabel("Fitness")
+		plt.savefig('boxplot_best_fitness_' + 'en_' + str(enemy_id) + '.png')
+		plt.show()
 		
-	
-	
 
 main()
