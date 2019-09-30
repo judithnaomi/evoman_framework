@@ -1,4 +1,4 @@
-# 29 September 2019
+# 30 September 2019
 # Group 17
 
 # Goal: get data from results.csv files and make line plots of average fitness.
@@ -27,9 +27,6 @@ def boxplot_of_all_runs(enemy_id, algorithm_id):
 	bf = np.array(bf).astype(np.float)
 
 	plt.boxplot(bf)
-
-#	plt.savefig('boxplot_best_fitness_' + 'alg_' + str(algorithm_id) +'_en_' + str(enemy_id) + '.png')
-#	plt.show()
 
 def average_over_runs(enemy_id, algorithm_id):
 	# makes a line plot of the average fitness over 10 runs against enemy_id using algorithm_id
@@ -65,8 +62,7 @@ def average_over_runs(enemy_id, algorithm_id):
 
 def main():
 	# for each algorithm, for each enemy, we plot a line, that represents
-	# the average fitness over the 10 runs. # all enemies come in 1 figure. 1 figure per algorithm.
-
+	# the average fitness over the 10 runs
 	# we make 1 plot for the avg fitness of all en/alg combis
 	plt.figure()
 	for algorithm_id in ALGORITHMS:
