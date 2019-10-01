@@ -88,7 +88,7 @@ def main():
 
 	# 1 figure per enemy (since enemies differ a lot, it is ugly to plot all enemies in 1 boxplot).
 	# 2 algorithms per figure
-	for enemy_id in ENEMIES:
+	for i,enemy_id in enumerate(ENEMIES):
 		plt.figure()
 		bfs = []
 		for algorithm_id in ALGORITHMS:
@@ -97,7 +97,14 @@ def main():
 
 			bfs.append(boxplot_of_all_runs(enemy_id, algorithm_id))
 
-		plt.boxplot(bfs,positions=[1,2])
+		bp = plt.boxplot(bfs,positions=[1,2], patch_artist=True)
+		#bp = ax.boxplot(data, patch_artist=True)
+		for element in ['boxes', 'whiskers', 'fliers', 'means', 'medians', 'caps']:
+			plt.setp(bp[element], color='black')
+
+		for patch in bp['boxes']:
+			patch.set(facecolor=COLORS_ENEMIES[i])
+
 		plt.title("Boxplot of best fitness enemy " + str(enemy_id))
 		plt.ylabel("Fitness")
 		plt.savefig('boxplot_best_fitness_' + 'en_' + str(enemy_id) + '.png')
