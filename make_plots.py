@@ -1,4 +1,4 @@
-# 30 September 2019
+# 1 October 2019
 # Group 17
 
 # Goal: get data from results.csv files and make line plots of average fitness.
@@ -7,8 +7,12 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-ENEMIES = [5,7] # enemies that we battle against!! [1,5,7]
+ENEMIES = [1,5,7] # enemies that we battle against!! [1,5,7]
 ALGORITHMS = [1,2] # algorithms that we test! can be either 1 or 2 or both
+
+COLORS_ENEMIES = ['r', 'g', 'b']
+LINESTYLES_ALGORITHMS = ['-', ':']
+
 MAX_NO_GENERATIONS = 50 
 
 def boxplot_of_all_runs(enemy_id, algorithm_id):
@@ -38,7 +42,7 @@ def average_over_runs(enemy_id, algorithm_id):
 	nof_generations = [] # the number of generations differs per run, so we save them in this list
 
 	for line in lines: # each line represents a run
-		if line.startswith("AF"): #AF = average fitness, AP = average player life, SF = standard deviation fitness, SP = standard deviation
+		if line.startswith("SP"): #AF = average fitness, AP = average player life, SF = standard deviation fitness, SP = standard deviation
 		# player life
 			fitnesses = line.split(',')[1:] # list of average fitness per generation for this run
 			nof_zeros_to_pad = MAX_NO_GENERATIONS - len(fitnesses) 
@@ -66,14 +70,17 @@ def main():
 	# we make 1 plot for the avg fitness of all en/alg combis
 	plt.figure()
 	for algorithm_id in ALGORITHMS:
-		for enemy_id in ENEMIES:
+		for i,enemy_id in enumerate(ENEMIES):
 			fit_avgs = average_over_runs(enemy_id, algorithm_id)
-			plt.plot(fit_avgs, label= 'enemy' + str(enemy_id) + '_alg_' + str(algorithm_id))
-	plt.title('Average fitness over generations')
-	plt.ylabel('Average fitness over 10 runs')
-	plt.xlabel('Generation')
-	plt.legend()
-	plt.savefig('avg_fitnes' + '.png')
+			plt.plot(fit_avgs, linestyle=LINESTYLES_ALGORITHMS[algorithm_id-1], color=COLORS_ENEMIES[i], 
+				label= 'enemy' + str(enemy_id) + '_alg_' + str(algorithm_id)) 
+			
+
+	plt.title('Standard deviation player life over generations', fontsize=18)
+	plt.ylabel('Standard deviation player life over 10 runs',  fontsize=10)
+	plt.xlabel('Generation',  fontsize=10)
+	plt.legend(fontsize = 'x-large') # choose from 'xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'
+	plt.savefig('sd_playerlife' + '.png')
 	plt.show()
 
 	# 1 figure per enemy (since enemies differ a lot, it is ugly to plot all enemies in 1 boxplot).
