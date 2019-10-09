@@ -66,7 +66,7 @@ generation_treshold = (n_randparents - parents_treshold) / n_downwards
 def simulation(x):
     z = np.array(x)
     f, p, e, t = env.play(pcont=z)
-    return f, e
+    return f, p
 
 
 def keep_within_boundaries(ls, lower, upper):
