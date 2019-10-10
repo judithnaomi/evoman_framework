@@ -20,15 +20,15 @@ from math import fabs, sqrt
 import glob, os
 import csv
 
-experiment_name = 'test'  # Assignment task 1
-enemy = 17 # Set correct enemy to run in this solution
+experiment_name = 'Assignment2_algorithm1'  # Assignment task 2
+enemies = [4,6,7] # Set correct enemy to run in this solution
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
 
 # initializes simulation in multi evolution mode, for multiple static enemies.
 env = Environment(experiment_name=experiment_name,
-                  enemies=[1,7],
+                  enemies=enemies,
                   multiplemode="yes",
                   playermode="ai",
                   player_controller=player_controller(),
@@ -48,7 +48,7 @@ ini = time.time()  # sets time marker
 n_runs = 1
 n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
-npop = 10 # 100
+npop = 100 
 id_individual = 1
 difference_treshold = 2
 variation = 0.1
