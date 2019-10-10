@@ -54,8 +54,8 @@ difference_treshold = 2
 variation = 0.1
 
 # mating parameters
-n_downwards = 4 # every generation, number of fittest individuals selected is decreased with n_downwards
-n_randparents = 50 # every generation, select n_randparents weaker individuals
+n_downwards = 0 # every generation, number of fittest individuals selected is decreased with n_downwards
+n_randparents = 10 # every generation, select n_randparents weaker individuals
 n_best_parents = 30 # every generation, select n_best_parents fittest individuals
 parents_treshold = 10 # stop with decreasing number of fittest individuals when n_randparents == parents_threshold
 generation_treshold = (n_randparents - parents_treshold) / n_downwards
