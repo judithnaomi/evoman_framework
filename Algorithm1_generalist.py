@@ -50,7 +50,7 @@ n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
 npop = 100 
 id_individual = 1
-difference_treshold = 2
+difference_treshold = 5
 variation = 0.1
 
 # mating parameters
@@ -215,7 +215,7 @@ def csv_results (run, statistics):
 def write_results(run,statistics):
     if run == 1:
         file_results = open(experiment_name + '/results.txt', 'w')
-        file_results.write('Tested Enemy: ' + str(enemy) + '\n')
+        #file_results.write('Tested Enemy: ' + str(enemy) + '\n')
     else:
         file_results = open(experiment_name + '/results.txt', 'a')
 
@@ -248,6 +248,7 @@ def write_individual(individual):
 
 def perform_run(difference_threshold, run):
     print('\nGeneration 1\n')
+    enemy='undefined'
     population = spawn()
     no_improvement = 0  # amount of generations that have not been improving
     old_best_fitness = ordered_population(population)[1][n_vars+1]
