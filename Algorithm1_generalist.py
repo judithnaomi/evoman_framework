@@ -20,7 +20,8 @@ from math import fabs, sqrt
 import glob, os
 import csv
 
-experiment_name = 'Assignment2_algorithm1'  # Assignment task 2
+enemy = 'undefined'
+experiment_name = 'test'  # Assignment task 2
 enemies = [4,6,7] # Set correct enemy to run in this solution
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
@@ -48,9 +49,9 @@ ini = time.time()  # sets time marker
 n_runs = 1
 n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
-npop = 100 
+npop = 10
 id_individual = 1
-difference_treshold = 5
+difference_treshold = 2
 variation = 0.1
 
 # mating parameters
@@ -140,7 +141,7 @@ def mate(n_random_parents, population):
 
         child1 = (np.array(mom[0:n_vars]) + np.array(dad[0:n_vars]))/2 # taking averages
        # child2 = dad[0:133] + mom[133:n_vars] # swapping half the weights
-        child2 = flip_coin_crossover(np.array(mom),np.array(dad))
+        child2 = flip_coin_crossover(np.array(mom[0:n_vars]),np.array(dad[0:n_vars]))
 
         gene_mutations1 = [rand.uniform(-variation, variation) for x in
                            range(n_vars)]  # creates some random numbers between -.1 and .1
@@ -240,9 +241,9 @@ def write_results(run,statistics):
     file_results.close()
 
 def write_individual(individual):
-
     file_results = open(experiment_name + '/individual.txt', 'w')
-    file_results.write(str(individual) + '\n')
+    for weight in individual:
+        file_results.write(str(weight) + '\n')
     file_results.close()
 
 
