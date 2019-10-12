@@ -20,7 +20,8 @@ from math import fabs, sqrt
 import glob, os
 import csv
 
-experiment_name = 'Assignment2_algorithm1'  # Assignment task 2
+enemy = 'undefined'
+experiment_name = 'test'  # Assignment task 2
 enemies = [4,6,7] # Set correct enemy to run in this solution
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
@@ -45,12 +46,12 @@ env.state_to_log()  # checks environment state
 ini = time.time()  # sets time marker
 
 # genetic algorithm params
-n_runs = 1
+n_runs = 10
 n_hidden = 10
 n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilayer with 10 hidden neurons
-npop = 100 
+npop = 100
 id_individual = 1
-difference_treshold = 2
+difference_treshold = 5
 variation = 0.1
 
 # mating parameters
@@ -58,7 +59,7 @@ n_downwards = 0 # every generation, number of fittest individuals selected is de
 n_randparents = 10 # every generation, select n_randparents weaker individuals
 n_best_parents = 30 # every generation, select n_best_parents fittest individuals
 parents_treshold = 10 # stop with decreasing number of fittest individuals when n_randparents == parents_threshold
-generation_treshold = (n_randparents - parents_treshold) / n_downwards
+
 
 # we will use a list containing of lists for our population, each lists represents one individual
 # the individual looks like [265 weights, id, fitness , playerlife]
@@ -139,8 +140,7 @@ def mate(n_random_parents, population):
         mom = ordered_parents[i+1]
 
         child1 = (np.array(mom[0:n_vars]) + np.array(dad[0:n_vars]))/2 # taking averages
-       # child2 = dad[0:133] + mom[133:n_vars] # swapping half the weights
-        child2 = flip_coin_crossover(np.array(mom),np.array(dad))
+        child2 = flip_coin_crossover(np.array(mom[0:n_vars]),np.array(dad[0:n_vars]))
 
         gene_mutations1 = [rand.uniform(-variation, variation) for x in
                            range(n_vars)]  # creates some random numbers between -.1 and .1
@@ -242,7 +242,8 @@ def write_results(run,statistics):
 def write_individual(individual):
 
     file_results = open(experiment_name + '/individual.txt', 'w')
-    file_results.write(str(individual) + '\n')
+    for weight in individual:
+        file_results.write(str(weight) + '\n')
     file_results.close()
 
 
@@ -263,13 +264,7 @@ def perform_run(difference_threshold, run):
 
     while no_improvement < difference_threshold:
         print('\n Generation ' + str(len(statistics[0])) + '\n')
-
-        if generation <= generation_treshold:
-            rand_parents = n_randparents - generation* n_downwards
-        else:
-            rand_parents = parents_treshold
-
-        newborns = mate(rand_parents, population)
+        newborns = mate(n_randparents, population)
         n_deaths = len(newborns)
         parents_newborns = add_individuals_to_population(population, newborns)
         population = select_survivors(parents_newborns,n_deaths)
