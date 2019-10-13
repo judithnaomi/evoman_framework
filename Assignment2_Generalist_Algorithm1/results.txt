@@ -1,0 +1,22 @@
+RUN 1
+
+# of generations: 5
+# of fitness evaluations: 396
+Best fitness: 42.65497672189032
+
+Average of the fitness over the generations of this run: 2.8227768694224933
+Average standard deviation of the fitness over the generations of this run: 6.10022325164343
+
+List with best fitness over the generations: 
+ ['BFundefined1', 11.538767057980671, 15.554046792263598, 42.65497672189032, 42.65497672189032, 42.65497672189032]
+List with average fitness over the generations: 
+['AFundefined1', -4.684723325884199, -2.1182269970748884, 1.8297514078433597, 7.196367116447174, 11.89071614578102]
+List with standard deviation of the weights over the generations: 
+ ['SWundefined1', 0.5755419192395124, 0.5384755721956455, 0.5090609310141689, 0.4586252368299403, 0.42315740490213777]
+List with average playerlife over the generations: 
+['APundefined1', -0.04197364098714067, -0.024576671367470614, -0.024576671367470614, 0.0, -0.09996353971937393]
+List with standard deviation of the fitness over the generations: 
+['SFundefined1', 4.2592665843533135, 5.95876118818127, 8.461994519001532, 7.228448080289217, 4.5926458863918205]
+List with standard deviation of the playerlife over the generations: 
+['SPundefined1', 0.41763245471828464, 0.24453479256531227, 0.2445347925653123, 0.0, 0.9946246618948564]
+
