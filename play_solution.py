@@ -27,7 +27,8 @@ env = Environment(experiment_name=experiment_name,
 				  enemymode="static",
 				  level=2)
 
-sol = np.loadtxt('Assignment2_Generalist_Algorithm1/individual.txt') 	# Here you want to load the weights
+#sol = np.loadtxt('Assignment2_Generalist_Algorithm1/individual.txt') 	# Algorithm 1
+sol = np.loadtxt('competition_alg2_78/individual.txt')					# Algorithm 2
 print('\n LOADING SAVED GENERALIST SOLUTION FOR ALL ENEMIES \n')
 
 # tests saved demo solutions for each enemy
