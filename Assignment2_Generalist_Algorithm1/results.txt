@@ -2,21 +2,219 @@ RUN 1
 
 # of generations: 5
 # of fitness evaluations: 396
-Best fitness: 42.65497672189032
+Best fitness: 85.24621389609808
 
-Average of the fitness over the generations of this run: 2.8227768694224933
-Average standard deviation of the fitness over the generations of this run: 6.10022325164343
+Average of the fitness over the generations of this run: 16.77384701063702
+Average standard deviation of the fitness over the generations of this run: 22.764793457748027
 
 List with best fitness over the generations: 
- ['BFundefined1', 11.538767057980671, 15.554046792263598, 42.65497672189032, 42.65497672189032, 42.65497672189032]
+ ['BFundefined1', 74.91550058692482, 74.91550058692482, 85.24621389609808, 85.24621389609808, 85.24621389609808]
 List with average fitness over the generations: 
-['AFundefined1', -4.684723325884199, -2.1182269970748884, 1.8297514078433597, 7.196367116447174, 11.89071614578102]
+['AFundefined1', 0.22687536426881377, 4.813214461247693, 11.75847763930232, 24.41777539753519, 42.65289219083108]
 List with standard deviation of the weights over the generations: 
- ['SWundefined1', 0.5755419192395124, 0.5384755721956455, 0.5090609310141689, 0.4586252368299403, 0.42315740490213777]
+ ['SWundefined1', 0.5755694611491946, 0.5454572865911977, 0.502941682631848, 0.46690682668791494, 0.4344072122315255]
 List with average playerlife over the generations: 
-['APundefined1', -0.04197364098714067, -0.024576671367470614, -0.024576671367470614, 0.0, -0.09996353971937393]
+['APundefined1', 0.0, 0.0, 0.09400000000000232, 0.09400000000000232, 0.09400000000000232]
 List with standard deviation of the fitness over the generations: 
-['SFundefined1', 4.2592665843533135, 5.95876118818127, 8.461994519001532, 7.228448080289217, 4.5926458863918205]
+['SFundefined1', 16.71995010020436, 19.821421002500163, 23.019169194420027, 27.45366956488793, 26.809757426727664]
 List with standard deviation of the playerlife over the generations: 
-['SPundefined1', 0.41763245471828464, 0.24453479256531227, 0.2445347925653123, 0.0, 0.9946246618948564]
+['SPundefined1', 0.0, 0.0, 0.9352881908802458, 0.9352881908802458, 0.9352881908802458]
+
+RUN 2
+
+# of generations: 5
+# of fitness evaluations: 396
+Best fitness: 87.03196501081939
+
+Average of the fitness over the generations of this run: 29.265240276486765
+Average standard deviation of the fitness over the generations of this run: 19.722933321409705
+
+List with best fitness over the generations: 
+ ['BFundefined2', 66.17399989261955, 66.17399989261955, 87.03196501081939, 87.03196501081939, 87.03196501081939]
+List with average fitness over the generations: 
+['AFundefined2', 1.493017066535904, 10.442928710901617, 25.90501454766014, 46.11282601102759, 62.37241504630857]
+List with standard deviation of the weights over the generations: 
+ ['SWundefined2', 0.575103118233822, 0.5421409510075557, 0.5027393898144829, 0.45714579164161545, 0.40309001929524285]
+List with average playerlife over the generations: 
+['APundefined2', 0.0, 0.0, 0.2980000000000026, 0.2980000000000026, 0.2980000000000026]
+List with standard deviation of the fitness over the generations: 
+['SFundefined2', 17.617055007652514, 24.113961720486262, 28.045434599302, 23.688067171204427, 5.150148108403327]
+List with standard deviation of the playerlife over the generations: 
+['SPundefined2', 0.0, 0.0, 2.965062562577753, 2.965062562577753, 2.965062562577753]
+
+RUN 3
+
+# of generations: 4
+# of fitness evaluations: 328
+Best fitness: 75.25379680945983
+
+Average of the fitness over the generations of this run: 22.095924097609785
+Average standard deviation of the fitness over the generations of this run: 23.625096878684374
+
+List with best fitness over the generations: 
+ ['BFundefined3', 66.17399989261955, 75.25379680945983, 75.25379680945983, 75.25379680945983]
+List with average fitness over the generations: 
+['AFundefined3', 2.784373989943713, 11.212612678393809, 26.59787767665438, 47.788832045447236]
+List with standard deviation of the weights over the generations: 
+ ['SWundefined3', 0.5720590775879988, 0.5337093340809337, 0.5019354291069434, 0.45483014602196886]
+List with average playerlife over the generations: 
+['APundefined3', 0.0, 0.0, 0.0, 0.0]
+List with standard deviation of the fitness over the generations: 
+['SFundefined3', 19.211805782358095, 24.599069657389514, 27.69630944171027, 22.993202633279626]
+List with standard deviation of the playerlife over the generations: 
+['SPundefined3', 0.0, 0.0, 0.0, 0.0]
+
+RUN 4
+
+# of generations: 4
+# of fitness evaluations: 328
+Best fitness: 75.56627799644576
+
+Average of the fitness over the generations of this run: 12.660413422855719
+Average standard deviation of the fitness over the generations of this run: 24.23951767198642
+
+List with best fitness over the generations: 
+ ['BFundefined4', 75.56627799644576, 75.56627799644576, 75.56627799644576, 75.56627799644576]
+List with average fitness over the generations: 
+['AFundefined4', 0.1717451660393834, 4.943980632357757, 14.673263800155146, 30.852664092870583]
+List with standard deviation of the weights over the generations: 
+ ['SWundefined4', 0.5733833045934866, 0.5421961611683798, 0.5053708582351836, 0.45801974525926337]
+List with average playerlife over the generations: 
+['APundefined4', 0.0, 0.0, 0.0, 0.0]
+List with standard deviation of the fitness over the generations: 
+['SFundefined4', 18.66506219475021, 22.939642745825694, 27.211481355547917, 28.141884391821854]
+List with standard deviation of the playerlife over the generations: 
+['SPundefined4', 0.0, 0.0, 0.0, 0.0]
+
+RUN 5
+
+# of generations: 11
+# of fitness evaluations: 720
+Best fitness: 86.01289246928256
+
+Average of the fitness over the generations of this run: 45.85049538750352
+Average standard deviation of the fitness over the generations of this run: 11.764988848019533
+
+List with best fitness over the generations: 
+ ['BFundefined5', 66.17399989261955, 66.17399989261955, 66.17399989261955, 66.63402398497814, 66.63870783429057, 75.62010264645954, 84.91703951986408, 84.91703951986408, 86.01289246928256, 86.01289246928256, 86.01289246928256]
+List with average fitness over the generations: 
+['AFundefined5', -1.238657023396432, 3.2940897414799717, 14.51673416695072, 31.73700905753729, 54.1890238332243, 62.63884375185344, 66.38984515664852, 67.39372238557199, 67.88127120163931, 68.53470752150886, 69.01885946952078]
+List with standard deviation of the weights over the generations: 
+ ['SWundefined5', 0.5740129185575991, 0.5415999771811141, 0.5062569650717138, 0.47337477654515575, 0.4336744033125559, 0.39437262797122996, 0.3401445119581062, 0.3073565835897175, 0.3096991651317889, 0.3097308669085934, 0.3130463137182069]
+List with average playerlife over the generations: 
+['APundefined5', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.11000000000000465, 0.11000000000000465, 0.246000000000007, 0.246000000000007, 0.3460000000000093]
+List with standard deviation of the fitness over the generations: 
+['SFundefined5', 14.340338924681358, 19.649074503477795, 25.81244811265612, 27.64780486163898, 15.501848671543504, 4.979575002001856, 4.063243392423014, 3.588767841901408, 4.231737417488394, 4.606073900327106, 4.9939647000753205]
+List with standard deviation of the playerlife over the generations: 
+['SPundefined5', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.7711679453919558, 0.7711679453919558, 1.5478643351405545, 1.5478643351405545, 1.826659245727061]
+
+RUN 6
+
+# of generations: 6
+# of fitness evaluations: 460
+Best fitness: 84.52586946817496
+
+Average of the fitness over the generations of this run: 29.50767044940535
+Average standard deviation of the fitness over the generations of this run: 20.51781982621782
+
+List with best fitness over the generations: 
+ ['BFundefined6', 75.21925648420768, 75.21925648420768, 75.21925648420768, 84.52586946817496, 84.52586946817496, 84.52586946817496]
+List with average fitness over the generations: 
+['AFundefined6', 1.1245512435344514, 6.73124009202088, 16.392246601351506, 32.79953069377981, 54.827824722265376, 65.17062934348009]
+List with standard deviation of the weights over the generations: 
+ ['SWundefined6', 0.573263491678102, 0.5357293096445807, 0.5062737171210137, 0.46783441461140296, 0.41030138437220365, 0.35766794951610087]
+List with average playerlife over the generations: 
+['APundefined6', 0.0, 0.0, 0.0, 0.03400000000000235, 0.03400000000000235, 0.03400000000000235]
+List with standard deviation of the fitness over the generations: 
+['SFundefined6', 18.776493034396196, 23.48085034434234, 28.207462267224184, 29.65992194976411, 18.344550254617058, 4.63764110696302]
+List with standard deviation of the playerlife over the generations: 
+['SPundefined6', 0.0, 0.0, 0.0, 0.3382957286162741, 0.3382957286162741, 0.3382957286162741]
+
+RUN 7
+
+# of generations: 6
+# of fitness evaluations: 460
+Best fitness: 74.95026654476806
+
+Average of the fitness over the generations of this run: 33.89201561674273
+Average standard deviation of the fitness over the generations of this run: 16.192788689179316
+
+List with best fitness over the generations: 
+ ['BFundefined7', 66.17399989261955, 66.51520306650934, 66.5928282285399, 74.95026654476806, 74.95026654476806, 74.95026654476806]
+List with average fitness over the generations: 
+['AFundefined7', -1.0741630767205006, 8.058561744200567, 22.21223107585849, 46.783698726571814, 62.08458004324602, 65.28718518729997]
+List with standard deviation of the weights over the generations: 
+ ['SWundefined7', 0.5752500016195913, 0.5386181778303712, 0.48869876560156417, 0.4455968221690148, 0.3967141020945183, 0.3624379487391742]
+List with average playerlife over the generations: 
+['APundefined7', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+List with standard deviation of the fitness over the generations: 
+['SFundefined7', 14.392555550413002, 23.803257474524706, 27.953945155405947, 23.36059100152915, 4.691810436581572, 2.9545725166215053]
+List with standard deviation of the playerlife over the generations: 
+['SPundefined7', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+RUN 8
+
+# of generations: 4
+# of fitness evaluations: 328
+Best fitness: 86.12628484395722
+
+Average of the fitness over the generations of this run: 21.116320394988186
+Average standard deviation of the fitness over the generations of this run: 25.605537236743274
+
+List with best fitness over the generations: 
+ ['BFundefined8', 66.63402398497814, 86.12628484395722, 86.12628484395722, 86.12628484395722]
+List with average fitness over the generations: 
+['AFundefined8', 2.8090336653330272, 11.612311876500373, 26.103486513385032, 43.940449524734305]
+List with standard deviation of the weights over the generations: 
+ ['SWundefined8', 0.5739829770670352, 0.539587868064215, 0.4953581898781729, 0.46139773892215497]
+List with average playerlife over the generations: 
+['APundefined8', 0.0, 0.2140000000000024, 0.2140000000000024, 0.2140000000000024]
+List with standard deviation of the fitness over the generations: 
+['SFundefined8', 19.99644004711884, 26.494963858046905, 29.61493635936723, 26.315808682440117]
+List with standard deviation of the playerlife over the generations: 
+['SPundefined8', 0.0, 2.12927311540819, 2.12927311540819, 2.12927311540819]
+
+RUN 9
+
+# of generations: 4
+# of fitness evaluations: 328
+Best fitness: 66.62010264645954
+
+Average of the fitness over the generations of this run: 20.385703116616455
+Average standard deviation of the fitness over the generations of this run: 22.595805196621107
+
+List with best fitness over the generations: 
+ ['BFundefined9', 57.61092827018351, 66.62010264645954, 66.62010264645954, 66.62010264645954]
+List with average fitness over the generations: 
+['AFundefined9', 1.198366942068883, 9.378005458875299, 25.66136160967152, 45.30507845585012]
+List with standard deviation of the weights over the generations: 
+ ['SWundefined9', 0.5736034088311027, 0.5385785701227063, 0.5009578271209311, 0.456522080704771]
+List with average playerlife over the generations: 
+['APundefined9', 0.0, 0.0, 0.0, 0.0]
+List with standard deviation of the fitness over the generations: 
+['SFundefined9', 16.240476910932315, 23.026839765231685, 28.094822463018048, 23.021081647302374]
+List with standard deviation of the playerlife over the generations: 
+['SPundefined9', 0.0, 0.0, 0.0, 0.0]
+
+RUN 10
+
+# of generations: 5
+# of fitness evaluations: 396
+Best fitness: 84.59486503108351
+
+Average of the fitness over the generations of this run: 16.814304307772794
+Average standard deviation of the fitness over the generations of this run: 21.165246359840516
+
+List with best fitness over the generations: 
+ ['BFundefined10', 66.17399989261955, 66.17399989261955, 84.59486503108351, 84.59486503108351, 84.59486503108351]
+List with average fitness over the generations: 
+['AFundefined10', -1.8627941230599614, 1.7977883377721746, 11.978321770182673, 26.663556330145166, 45.494649223823934]
+List with standard deviation of the weights over the generations: 
+ ['SWundefined10', 0.5739154754957522, 0.5382049438282661, 0.5039524302267853, 0.4657453649996485, 0.41590353497108484]
+List with average playerlife over the generations: 
+['APundefined10', 0.0, 0.0, 0.040000000000002346, 0.040000000000002346, 0.040000000000002346]
+List with standard deviation of the fitness over the generations: 
+['SFundefined10', 12.779071855059671, 17.078904490711516, 24.642710510607586, 27.342377980571456, 23.983166962252362]
+List with standard deviation of the playerlife over the generations: 
+['SPundefined10', 0.0, 0.0, 0.39799497484267127, 0.39799497484267127, 0.39799497484267127]
 
