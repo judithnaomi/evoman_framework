@@ -52,7 +52,8 @@ n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilay
 npop = 10
 id_individual = 1
 difference_treshold = 2
-variation = 0.1
+sigma= 0.1
+mu = 0
 
 # mating parameters
 n_downwards = 4 # every generation, number of fittest individuals selected is decreased with n_downwards
@@ -122,14 +123,16 @@ def mate(n_random_parents, population):
     left_pop = pop[n_best_parents:]
     random_numbers = list(range(0, len(left_pop)))
     rand.shuffle(random_numbers)
-
+    
+    #PARENT SELECTION
+    
     for i in range(n_random_parents): # random select n_random_parents from leftover population
         random_parent = left_pop[random_numbers[i]]
         parents.append(random_parent)
 
     ordered_parents = ordered_population(parents)
     for i in range(len(ordered_parents)):
-        coin = rand.uniform(0, 1) # flip a coin to see if parent i swap index with random other parent
+        coin = rand.uniform(0, 1) # determine by chance if parent i swap index with random other parent
         if coin <= 0.1:
             number = rand.randint(i, len(ordered_parents)-1)
             ordered_parents[number] = ordered_parents[i]
@@ -138,14 +141,18 @@ def mate(n_random_parents, population):
     for i in range(0,len(ordered_parents),2):
         dad = ordered_parents[i]
         mom = ordered_parents[i+1]
-
+        
+    #CROSS OVER 
+        
         child1 = (np.array(mom[0:n_vars]) + np.array(dad[0:n_vars]))/2 # taking averages
        # child2 = dad[0:133] + mom[133:n_vars] # swapping half the weights
         child2 = flip_coin_crossover(np.array(mom[0:n_vars]),np.array(dad[0:n_vars]))
+        
+    #MUTATION
 
-        gene_mutations1 = [rand.uniform(-variation, variation) for x in
+        gene_mutations1 = [np.random.normal(mu, sigma) for x in
                            range(n_vars)]  # creates some random numbers between -.1 and .1
-        gene_mutations2 = [rand.uniform(-variation, variation) for x in
+        gene_mutations2 = [np.random.normal(mu, sigma) for x in
                            range(n_vars)]
         genotype_child1 = list(keep_within_boundaries(np.add(gene_mutations1, child1), -1, 1))
         genotype_child2 = list(keep_within_boundaries(np.add(gene_mutations2, child2), -1, 1))
