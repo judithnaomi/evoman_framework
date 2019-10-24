@@ -52,7 +52,8 @@ n_vars = (env.get_num_sensors() + 1) * n_hidden + (n_hidden + 1) * 5  # multilay
 npop = 100
 id_individual = 1
 difference_treshold = 5
-variation = 0.1
+sigma = 0.1
+mu = 0
 
 # mating parameters
 n_downwards = 0 # every generation, number of fittest individuals selected is decreased with n_downwards
@@ -117,6 +118,9 @@ def ordered_population(population):
 
 def mate(n_random_parents, population):
     newborns = []
+    
+    #PARENT SELECTION
+    
     pop = ordered_population(population)
     parents = pop[0:n_best_parents] #select best n parents
     left_pop = pop[n_best_parents:]
@@ -134,6 +138,8 @@ def mate(n_random_parents, population):
             number = rand.randint(i, len(ordered_parents)-1)
             ordered_parents[number] = ordered_parents[i]
             ordered_parents[i] = ordered_parents[number]
+            
+    #CROSS OVER
 
     for i in range(0,len(ordered_parents),2):
         dad = ordered_parents[i]
@@ -141,10 +147,12 @@ def mate(n_random_parents, population):
 
         child1 = (np.array(mom[0:n_vars]) + np.array(dad[0:n_vars]))/2 # taking averages
         child2 = flip_coin_crossover(np.array(mom[0:n_vars]),np.array(dad[0:n_vars]))
+        
+    #MUTATION
 
-        gene_mutations1 = [rand.uniform(-variation, variation) for x in
+        gene_mutations1 = [np.random.normal(mu, sigma) for x in
                            range(n_vars)]  # creates some random numbers between -.1 and .1
-        gene_mutations2 = [rand.uniform(-variation, variation) for x in
+        gene_mutations2 = [np.random.normal(mu, sigma) for x in
                            range(n_vars)]
         genotype_child1 = list(keep_within_boundaries(np.add(gene_mutations1, child1), -1, 1))
         genotype_child2 = list(keep_within_boundaries(np.add(gene_mutations2, child2), -1, 1))
